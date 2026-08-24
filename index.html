@@ -323,6 +323,24 @@
       padding-top: 0.75rem;
       border-top: 1px solid var(--line);
       font-weight: 500;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .card-visit {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      padding-bottom: 2px;
+      white-space: nowrap;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .card-visit:hover {
+      color: var(--ink);
+      border-color: var(--ink);
     }
 
     /* ============================================
@@ -682,7 +700,7 @@
             { heading: 'What I took away', text: 'Being a Special Finalist is a nice line. Running an event that leaves a hundred people with a shared memory is the real thing — and every subsequent pitch now has an existence proof to point to.' }
           ],
           links: [
-            { label: 'Investor deck (PDF)', url: '#' }
+            { label: 'Investor deck (PDF)', url: 'assets/youin-deck.pdf' }
           ]
         }
       },
@@ -739,7 +757,7 @@
             { heading: 'The defense', text: "We modeled four constructions. 100% VOO beat us in a bull year but fell harder in a bear year (–18% vs our –11%). A 40/40/20 version was too conservative for a 10+ year horizon. Target-date funds cost more for less control. Bear scenario: –10.6%. Base: +8.4%. Bull: +18.8%. The point wasn't maximizing return. It was engineering the portfolio so no single thing could blow it up." }
           ],
           links: [
-            { label: 'Full deck (PDF)', url: '#' }
+            { label: 'Full deck (PDF)', url: 'assets/500-portfolio.pdf' }
           ]
         }
       },
@@ -810,10 +828,17 @@
         <h3 class="project-title">${p.title}</h3>
         <div class="project-role">${p.role}</div>
         <p class="project-hook">${p.hook}</p>
-        <div class="project-cta">Read the walkthrough →</div>
+        <div class="project-cta">
+          <span>Read the walkthrough →</span>
+          ${p.url ? `<a href="${p.url}" target="_blank" rel="noopener" class="card-visit">Visit ↗</a>` : ''}
+        </div>
       `;
       card.addEventListener('click', () => openWalkthrough(p, card));
       grid.appendChild(card);
+
+      /* Let the Visit link navigate without also expanding the walkthrough. */
+      const visit = card.querySelector('.card-visit');
+      if (visit) visit.addEventListener('click', e => e.stopPropagation());
     });
 
     /* ============================================
