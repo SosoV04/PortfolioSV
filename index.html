@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sophia Vina — Portfolio</title>
+  <meta name="description" content="Portfolio of Sophia Vina — AI student at Purdue, builder at the intersection of AI, business, and the things people actually use.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,500;1,9..144,600&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================
+       DESIGN TOKENS
+       Palette matches Sophia's Building CEOs + YouIn decks:
+       cream base, deep navy ink, warm gold accent.
+       ============================================ */
+    :root {
+      --bg:            #F5EDD5;   /* warm cream — Building CEOs deck bg */
+      --bg-elevated:   #EBE1BF;   /* cards / hover surface */
+      --ink:           #14263D;   /* deep navy — Sophia's signature */
+      --ink-soft:      #3D4E68;
+      --muted:         #7B8299;
+      --navy-deep:     #0C1A2E;   /* darkest, for high-contrast surfaces */
+      --gold:          #B8923D;   /* warm gold accent */
+      --gold-bright:   #D9AB4A;   /* hover state */
+      --gold-soft:     #E4C874;   /* subtle highlight */
+      --line:          #D9CFA5;
+      --white:         #FDF9ED;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    ::selection { background: var(--ink); color: var(--gold-soft); }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Inter Tight', system-ui, -apple-system, sans-serif;
+      font-size: 1rem;
+      line-height: 1.55;
+    }
+
+    /* ============================================
+       TYPOGRAPHY
+       ============================================ */
+    .display {
+      font-family: 'Fraunces', Georgia, serif;
+      font-variation-settings: "opsz" 144;
+      font-weight: 400;
+      line-height: 0.95;
+      letter-spacing: -0.025em;
+    }
+
+    .mono {
+      font-family: 'JetBrains Mono', 'Menlo', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    /* ============================================
+       LAYOUT
+       ============================================ */
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .container { padding: 0 1.25rem; }
+    }
+
+    /* ============================================
+       HEADER
+       ============================================ */
+    header {
+      padding: 1.25rem 0;
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      background: rgba(245, 237, 213, 0.92);
+      backdrop-filter: blur(8px);
+      z-index: 10;
+    }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .logo {
+      font-family: 'Fraunces', serif;
+      font-variation-settings: "opsz" 24;
+      font-style: italic;
+      font-weight: 500;
+      font-size: 1.25rem;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    nav a {
+      color: var(--ink-soft);
+      text-decoration: none;
+      font-size: 0.9rem;
+      margin-left: 1.75rem;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--gold); }
+
+    @media (max-width: 500px) {
+      nav a { margin-left: 1rem; font-size: 0.85rem; }
+    }
+
+    /* ============================================
+       HERO — with headshot
+       ============================================ */
+    .hero {
+      padding: 5rem 0 4rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+      .hero-portrait { max-width: 320px; }
+    }
+
+    .hero-text { max-width: 42rem; }
+
+    .hero-eyebrow {
+      color: var(--gold);
+      margin-bottom: 2rem;
+      display: inline-block;
+    }
+
+    .hero-name {
+      font-size: clamp(3.25rem, 9vw, 7.5rem);
+      margin-bottom: 1.75rem;
+    }
+
+    .hero-name em {
+      font-style: italic;
+      color: var(--gold);
+      font-variation-settings: "opsz" 144, "wght" 400;
+    }
+
+    .hero-tagline {
+      font-family: 'Fraunces', serif;
+      font-variation-settings: "opsz" 30;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(1.3rem, 2.3vw, 1.75rem);
+      color: var(--ink-soft);
+      line-height: 1.35;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-bio {
+      color: var(--ink-soft);
+      font-size: 1.05rem;
+      line-height: 1.65;
+    }
+
+    .hero-portrait {
+      position: relative;
+      align-self: start;
+    }
+
+    .hero-portrait img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 40px rgba(20, 38, 61, 0.12);
+    }
+
+    .hero-portrait-caption {
+      margin-top: 1rem;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    /* ============================================
+       SECTION HEADERS
+       ============================================ */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 3rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-title {
+      font-family: 'Fraunces', serif;
+      font-variation-settings: "opsz" 60;
+      font-weight: 400;
+      font-size: clamp(1.75rem, 3vw, 2.25rem);
+      font-style: italic;
+    }
+
+    .section-meta { color: var(--muted); }
+
+    /* ============================================
+       PROJECT GRID
+       ============================================ */
+    .projects { padding: 5rem 0; }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 1.75rem;
+    }
+
+    @media (max-width: 900px) {
+      .project-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    }
+
+    .project-card {
+      grid-column: span 3;
+      background: var(--bg-elevated);
+      border: 1px solid var(--line);
+      padding: 1.75rem;
+      cursor: pointer;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      text-align: left;
+    }
+
+    .project-card.wide { grid-column: span 6; }
+
+    @media (max-width: 900px) {
+      .project-card,
+      .project-card.wide { grid-column: 1; }
+    }
+
+    .project-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(20, 38, 61, 0.10);
+      border-color: var(--gold);
+    }
+
+    .project-thumb {
+      aspect-ratio: 16 / 10;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      padding: 1.25rem;
+      color: var(--white);
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-size: 1.4rem;
+      margin-bottom: 0.25rem;
+      position: relative;
+      overflow: hidden;
+      background-size: cover;
+      background-position: center;
+    }
+
+    /* Each project gets a distinct gradient placeholder, all in
+       the navy/gold/warm family. To swap for a real screenshot:
+       change to `background: url('images/youin.jpg') center/cover;` */
+    .thumb-youin      { background: linear-gradient(135deg, #14263D 0%, #B8923D 100%); }
+    .thumb-vinya      { background: linear-gradient(135deg, #2B5470 0%, #14263D 100%); }
+    .thumb-charles    { background: linear-gradient(135deg, #1B3A5C 0%, #0C1A2E 100%); }
+    .thumb-ceos       { background: linear-gradient(135deg, #14263D 0%, #8B6E2A 100%); }
+    .thumb-xtern      { background: linear-gradient(135deg, #5A4020 0%, #14263D 100%); }
+    .thumb-boilerbite { background: linear-gradient(135deg, #A87A2A 0%, #14263D 100%); }
+    .thumb-rpvi       { background: linear-gradient(135deg, #3D5A6B 0%, #14263D 100%); }
+
+    .project-tag { color: var(--gold); }
+
+    .project-title {
+      font-family: 'Fraunces', serif;
+      font-variation-settings: "opsz" 60;
+      font-weight: 500;
+      font-size: 1.75rem;
+      line-height: 1.05;
+    }
+
+    .project-role {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .project-hook {
+      color: var(--ink-soft);
+      font-size: 0.98rem;
+      line-height: 1.55;
+    }
+
+    .project-cta {
+      color: var(--gold);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: auto;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--line);
+      font-weight: 500;
+    }
+
+    /* ============================================
+       WALKTHROUGH (expands inline)
+       ============================================ */
+    .walkthrough {
+      grid-column: 1 / -1;
+      padding: 3.5rem 2.5rem;
+      border-top: 2px solid var(--gold);
+      border-bottom: 2px solid var(--gold);
+      margin: 1.5rem 0;
+      background: var(--white);
+      animation: slideOpen 0.4s ease;
+    }
+
+    @keyframes slideOpen {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      .walkthrough { padding: 2rem 1.25rem; }
+    }
+
+    .walkthrough-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .walkthrough-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-shrink: 0;
+    }
+
+    .btn-live, .walkthrough-close {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0.55rem 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
+      border: 1px solid var(--ink);
+    }
+
+    .btn-live {
+      background: var(--ink);
+      color: var(--bg);
+    }
+    .btn-live:hover {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--ink);
+    }
+
+    .walkthrough-close {
+      background: transparent;
+      color: var(--ink);
+    }
+    .walkthrough-close:hover {
+      background: var(--ink);
+      color: var(--bg);
+    }
+
+    .walkthrough h3 {
+      font-family: 'Fraunces', serif;
+      font-variation-settings: "opsz" 96;
+      font-weight: 400;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-style: italic;
+      line-height: 1.05;
+      margin-top: 0.5rem;
+    }
+
+    .walkthrough-lede {
+      font-family: 'Fraunces', serif;
+      font-variation-settings: "opsz" 30;
+      font-size: clamp(1.1rem, 1.7vw, 1.25rem);
+      color: var(--ink);
+      max-width: 45rem;
+      margin: 1.5rem 0 3rem;
+      line-height: 1.55;
+    }
+
+    .walkthrough-photos {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-bottom: 3rem;
+    }
+
+    .walkthrough-photo {
+      aspect-ratio: 4 / 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      text-align: center;
+      padding: 1rem;
+      background: var(--ink);
+      opacity: 0.85;
+    }
+
+    .walkthrough-photo.wide {
+      grid-column: 1 / -1;
+      aspect-ratio: 16 / 8;
+    }
+
+    @media (max-width: 768px) {
+      .walkthrough-photos { grid-template-columns: 1fr; }
+      .walkthrough-photo.wide { aspect-ratio: 4 / 3; }
+    }
+
+    .walkthrough-story { max-width: 42rem; }
+
+    .walkthrough-story p {
+      margin-bottom: 1.25rem;
+      color: var(--ink-soft);
+      font-size: 1.02rem;
+      line-height: 1.65;
+    }
+
+    .walkthrough-story h4 {
+      font-family: 'Fraunces', serif;
+      font-variation-settings: "opsz" 30;
+      font-style: italic;
+      font-weight: 500;
+      color: var(--ink);
+      margin: 2.5rem 0 0.75rem;
+      font-size: 1.35rem;
+    }
+
+    .walkthrough-story h4:first-child { margin-top: 0; }
+
+    .walkthrough-meta {
+      display: flex;
+      gap: 2rem;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--line);
+      flex-wrap: wrap;
+    }
+
+    .walkthrough-meta a {
+      color: var(--gold);
+      text-decoration: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border-bottom: 1px solid var(--gold);
+      padding-bottom: 3px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .walkthrough-meta a:hover {
+      color: var(--ink);
+      border-color: var(--ink);
+    }
+
+    /* ============================================
+       ABOUT
+       ============================================ */
+    .about {
+      padding: 5rem 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    @media (max-width: 800px) {
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+    }
+
+    .about-label { color: var(--gold); }
+
+    .about-text {
+      font-family: 'Fraunces', serif;
+      font-variation-settings: "opsz" 30;
+      font-size: 1.3rem;
+      line-height: 1.5;
+      color: var(--ink);
+    }
+
+    .about-text p { margin-bottom: 1.5rem; }
+
+    .about-text em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    /* ============================================
+       FOOTER
+       ============================================ */
+    footer {
+      padding: 5rem 0 3rem;
+      border-top: 1px solid var(--line);
+      text-align: center;
+    }
+
+    footer .display {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-style: italic;
+      color: var(--ink);
+      margin-bottom: 2rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+
+    .footer-links a {
+      color: var(--gold);
+      text-decoration: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border-bottom: 1px solid transparent;
+      padding-bottom: 3px;
+      transition: border-color 0.2s;
+    }
+
+    .footer-links a:hover { border-color: var(--gold); }
+
+    .footer-fine {
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    /* ============================================
+       SCROLL REVEAL
+       ============================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container header-inner">
+      <a href="#top" class="logo">Sophia Vina</a>
+      <nav>
+        <a href="#work">Work</a>
+        <a href="#about">About</a>
+        <a href="mailto:sophiemv2004@gmail.com">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <a id="top"></a>
+
+  <!-- HERO with headshot -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-text">
+          <div class="mono hero-eyebrow">Portfolio · Edition 2026</div>
+          <h1 class="display hero-name">Sophia <em>Vina</em></h1>
+          <p class="hero-tagline">Building at the intersection of AI, business, and the things people actually use.</p>
+          <p class="hero-bio">Rising senior at Purdue's John Martinson Honors College, studying AI with minors in Management and Entrepreneurship. I like problems that live between disciplines — where the interesting work is figuring out <em>what</em> to build, not just how to build it.</p>
+        </div>
+        <div class="hero-portrait">
+          <img src="images/svina.jpg" alt="Sophia Vina" />
+          <div class="mono hero-portrait-caption">West Lafayette, IN</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section class="projects" id="work">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Selected work</h2>
+        <div class="mono section-meta">Seven projects · 2024–2026</div>
+      </div>
+      <div class="project-grid" id="projectGrid"></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="mono about-label">About</div>
+        <div class="about-text">
+          <p>I'm a rising senior at Purdue studying AI, with minors in Management and Entrepreneurship — which mostly just means I'm allowed to keep saying yes to projects that <em>don't fit in one category.</em></p>
+          <p>This summer I was a Digital & Technology intern at Goodwin Procter's Edge program, building agentic tools for internal operations. During the school year I lead the RPVI EPICS team, advise a cohort of student founders through BuildPurdue, and run YouIn — a live event platform we started in Purdue's VentureX accelerator.</p>
+          <p>I graduate in May 2027. If you're working on something at the intersection of <em>AI, business, or campus life</em> — I'd love to hear about it.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="display">Let's talk.</div>
+      <div class="footer-links">
+        <a href="mailto:sophiemv2004@gmail.com">Email</a>
+        <a href="https://linkedin.com/in/sophia-vina" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+      </div>
+      <div class="footer-fine">Designed & built by Sophia Vina · 2026</div>
+    </div>
+  </footer>
+
+  <script>
+    /* ============================================
+       PROJECT DATA
+       Every project has a live URL and a walkthrough.
+       Add more `sections` to the shorter ones as you go.
+       ============================================ */
+    const projects = [
+
+      /* ---------- YouIn — FEATURED ---------- */
+      {
+        id: 'youin',
+        tag: '[Startup · 2025–2026]',
+        title: 'YouIn',
+        role: 'Founder + Product',
+        hook: 'A launched platform that turns campus events into shared, competitive experiences. Started as U-Bet — a Burton D. Morgan Venture Competition Special Finalist — now live with real users and a validated event playbook.',
+        thumb: 'thumb-youin',
+        size: 'wide',
+        url: 'https://youin-fawn.vercel.app/',
+        walkthrough: {
+          lede: "YouIn started as U-Bet — a bet that the way a community decides what matters could feel less like a comment box and more like a market. It went from a Burton D. Morgan pitch competition finalist to a fully launched SaaS platform: hosts run real-time gamified challenges, students compete for the leaderboard, and the awkward first step of connecting just disappears.",
+          sections: [
+            { heading: 'The problem', text: "Students don't lack people around them. They lack the motivation to make the first move. 1 in 3 U.S. college students report feeling isolated, and anxiety in 18–25 year olds is up 134% since 2010. Every event tries to solve this and most events end with people leaving in the same groups they came in." },
+            { heading: 'What we built', text: 'A live SaaS platform with a full host flow (create → moderate → go live → set points → watch the leaderboard) and a one-tap player flow (join via QR → browse → claim → complete → climb). Safety is a two-layer moderation pipeline: instant keyword filter plus async LLM content review, with database-level role enforcement.' },
+            { heading: 'The proof — King of the Lawn', text: 'April 2026, Phi Delta Theta philanthropy event. 119 challenges completed. 5 full rounds played. ~100 users on the platform post-event. A +40% engagement bump between members and non-members. Chapter leadership called it the greatest turnout of members to a philanthropy event this year. Landon was crowned King of the Lawn.' },
+            { heading: 'What I took away', text: 'Being a Special Finalist is a nice line. Running an event that leaves a hundred people with a shared memory is the real thing — and every subsequent pitch now has an existence proof to point to.' }
+          ],
+          links: [
+            { label: 'Investor deck (PDF)', url: '#' }
+          ]
+        }
+      },
+
+      /* ---------- Vinya Voyage ---------- */
+      {
+        id: 'vinya',
+        tag: '[Personal · 2025]',
+        title: 'Vinya Voyage',
+        role: 'Designer + Builder',
+        hook: 'A personal site for the trips and moments worth writing down. [Update this hook once you\'ve locked in the framing you want.]',
+        thumb: 'thumb-vinya',
+        url: 'https://vina-voyage.vercel.app/',
+        walkthrough: {
+          lede: "A personal project — half travel journal, half design playground. [Update this lede in your own voice: what the site is, why you built it, and what you learned making it.]",
+          sections: [],
+          links: []
+        }
+      },
+
+      /* ---------- Charles Riverboat Narrator ---------- */
+      {
+        id: 'charles',
+        tag: '[Client Work · 2024]',
+        title: 'Charles Riverboat Narrator',
+        role: 'Designer + Builder',
+        hook: "A live tour-narrator microsite for Charles River Boat Company — so international guests can follow along in their own language while they're on the water.",
+        thumb: 'thumb-charles',
+        url: 'https://sosov04.github.io/CharlesRiverBoatNarrator/',
+        walkthrough: {
+          lede: "A GitHub Pages microsite I built for the Charles River Boat Company, where I work seasonally. The tour narrator runs on the guest's phone as the boat moves — so someone visiting from Japan or Brazil can follow the same story about MIT, Fenway, and the Longfellow Bridge that the English-speaking guests are hearing live.",
+          sections: [
+            { heading: 'Why it exists', text: "Between the sales team and the ops team, the ask I kept hearing every season was the same: international guests wanted more than a laminated pamphlet, and the captains couldn't translate 45 minutes of live commentary on the fly. A phone-first, tour-synced microsite was the smallest thing that actually solved it." }
+          ],
+          links: []
+        }
+      },
+
+      /* ---------- Building CEOs — $500 Portfolio ---------- */
+      {
+        id: 'ceos',
+        tag: '[Finance · 2026]',
+        title: 'The DiversifiHERs $500 Portfolio',
+        role: 'Analyst',
+        hook: "A $500 portfolio built and defended in Purdue's Brock-Wilson Building CEOs cohort. Not the highest-return option on the table — the best-engineered one.",
+        thumb: 'thumb-ceos',
+        url: null,   // no live site — PDF deck only
+        walkthrough: {
+          lede: "A long-term, diversified $500 portfolio built and defended in Purdue's Brock-Wilson Center Building CEOs leadership cohort. Our team — the DiversifiHERs — argued for a 20/60/20 allocation: short Treasuries, broad S&P 500, and dividend quality. Not the flashiest strategy in the room. The most defensible one.",
+          sections: [
+            { heading: 'The mandate', text: "Long-term (4+ years), beginner investor, moderate-to-high risk tolerance. $500 cap, fully liquid, publicly-traded ETFs or stocks only, no margin or derivatives. Taxable brokerage." },
+            { heading: 'The thesis', text: "With the Fed holding at 3.50%–3.75% and signaling only one cut in 2026, short-term yields remained competitive. A low-volatility, diversified approach was the most defensible choice for a beginner with only $500 — enough behavioral cushion to stay invested through the first bad month, without so much cash that returns got dragged down." },
+            { heading: 'The allocation', text: "20% SGOV (short Treasuries, ~3.99% yield, near-zero price risk). 60% VOO (broad S&P 500 at 0.03% expense — the cheapest core we could buy). 20% SCHD (dividend quality, ~3.43% yield, forward P/E of 15.4 vs the S&P's 22.4). Blended ~2.17% yield, roughly 75% of VOO's volatility with most of its upside." },
+            { heading: 'The defense', text: "We modeled four constructions. 100% VOO beat us in a bull year but fell harder in a bear year (–18% vs our –11%). A 40/40/20 version was too conservative for a 10+ year horizon. Target-date funds cost more for less control. Bear scenario: –10.6%. Base: +8.4%. Bull: +18.8%. The point wasn't maximizing return. It was engineering the portfolio so no single thing could blow it up." }
+          ],
+          links: [
+            { label: 'Full deck (PDF)', url: '#' }
+          ]
+        }
+      },
+
+      /* ---------- Xtern Challenge — FieldAssist AI ---------- */
+      {
+        id: 'xtern',
+        tag: '[Dashboard · 2025]',
+        title: 'FieldAssist AI — Xtern Challenge',
+        role: 'Analyst + Designer',
+        hook: "A field-technician job-optimization dashboard built for the TechPoint Xtern Challenge with Cummins — turning messy field data into decisions leads could act on.",
+        thumb: 'thumb-xtern',
+        url: 'https://cummins.firley.net/',
+        walkthrough: {
+          lede: "FieldAssist AI is a dashboard I built during the TechPoint Xtern Challenge, working on Cummins' field-technician data. Which team gets which job, in what order, with which parts available at which depot — none of that shows up in a spreadsheet in a way a supervisor can use in the moment. This is what would.",
+          sections: [],
+          links: []
+        }
+      },
+
+      /* ---------- BoilerBite ---------- */
+      {
+        id: 'boilerbite',
+        tag: '[Product · 2025]',
+        title: 'BoilerBite',
+        role: 'Designer + Builder',
+        hook: "An AI-powered learning tool for Purdue students — bite-sized concepts, tailored to how you actually study. [Update if the framing is off.]",
+        thumb: 'thumb-boilerbite',
+        url: 'https://boilerbite.com/',
+        walkthrough: {
+          lede: "BoilerBite is [update this lede with your own framing — what the tool does, who it's for, and the moment that made you build it]. Live at boilerbite.com.",
+          sections: [],
+          links: []
+        }
+      },
+
+      /* ---------- RPVI ---------- */
+      {
+        id: 'rpvi',
+        tag: '[Nonprofit Tech · 2024–Present]',
+        title: 'RPVI',
+        role: 'Project Manager + Builder',
+        hook: "A rebuilt web presence for RPVI — the EPICS team I lead, working with Clovernook and partner schools in Kenya to reshape how special education gets delivered.",
+        thumb: 'thumb-rpvi',
+        url: 'https://preview--rpvi.lovable.app/',
+        walkthrough: {
+          lede: "RPVI is a Purdue EPICS team I've led for two years, building tools and programs for blind and low-vision students. This site is how partner schools, prospective volunteers, and funders find out we exist — a rebuild that anchors the team's story under one roof.",
+          sections: [
+            { heading: 'The team behind it', text: "A 30+ person cross-disciplinary team, split across active projects with our institutional partner Clovernook (Ohio) and schools in Kenya. I lead PM, budget, and partnerships — and cold-sourced Clovernook itself, which expanded RPVI from a single Purdue effort into a multi-country program." }
+          ],
+          links: []
+        }
+      }
+    ];
+
+    /* ============================================
+       RENDER
+       ============================================ */
+    const grid = document.getElementById('projectGrid');
+
+    projects.forEach((p) => {
+      const card = document.createElement('article');
+      card.className = 'project-card reveal' + (p.size ? ' ' + p.size : '');
+      card.dataset.id = p.id;
+      card.innerHTML = `
+        <div class="project-thumb ${p.thumb}">${p.title}</div>
+        <div class="mono project-tag">${p.tag}</div>
+        <h3 class="project-title">${p.title}</h3>
+        <div class="project-role">${p.role}</div>
+        <p class="project-hook">${p.hook}</p>
+        <div class="project-cta">Read the walkthrough →</div>
+      `;
+      card.addEventListener('click', () => openWalkthrough(p, card));
+      grid.appendChild(card);
+    });
+
+    /* ============================================
+       WALKTHROUGH
+       ============================================ */
+    function openWalkthrough(p, sourceCard) {
+      document.querySelectorAll('.walkthrough').forEach(w => w.remove());
+
+      const w = document.createElement('div');
+      w.className = 'walkthrough';
+
+      const liveButton = p.url
+        ? `<a href="${p.url}" target="_blank" rel="noopener" class="btn-live">Visit live site ↗</a>`
+        : '';
+
+      const storyHTML = p.walkthrough.sections.length
+        ? `<div class="walkthrough-story">${p.walkthrough.sections.map(s => `<h4>${s.heading}</h4><p>${s.text}</p>`).join('')}</div>`
+        : '';
+
+      const metaHTML = p.walkthrough.links.length
+        ? `<div class="walkthrough-meta">${p.walkthrough.links.map(l => `<a href="${l.url}" target="_blank" rel="noopener">${l.label} →</a>`).join('')}</div>`
+        : '';
+
+      w.innerHTML = `
+        <div class="walkthrough-header">
+          <div>
+            <div class="mono project-tag">${p.tag}</div>
+            <h3>${p.title}</h3>
+          </div>
+          <div class="walkthrough-actions">
+            ${liveButton}
+            <button class="walkthrough-close">Close ×</button>
+          </div>
+        </div>
+        <p class="walkthrough-lede">${p.walkthrough.lede}</p>
+        <div class="walkthrough-photos">
+          <div class="walkthrough-photo wide">Hero screenshot (16:8) — replace with &lt;img src="images/${p.id}-hero.jpg"&gt;</div>
+          <div class="walkthrough-photo">Detail shot 1 (4:3)</div>
+          <div class="walkthrough-photo">Detail shot 2 (4:3)</div>
+        </div>
+        ${storyHTML}
+        ${metaHTML}
+      `;
+      insertAfterRow(sourceCard, w);
+      w.querySelector('.walkthrough-close').addEventListener('click', () => w.remove());
+      w.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function insertAfterRow(sourceCard, walkEl) {
+      const cards = Array.from(grid.querySelectorAll('.project-card'));
+      const srcTop = sourceCard.offsetTop;
+      let insertBefore = null;
+      for (const c of cards) {
+        if (c.offsetTop > srcTop) { insertBefore = c; break; }
+      }
+      if (insertBefore) {
+        grid.insertBefore(walkEl, insertBefore);
+      } else {
+        grid.appendChild(walkEl);
+      }
+    }
+
+    /* ============================================
+       SCROLL REVEAL
+       ============================================ */
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
