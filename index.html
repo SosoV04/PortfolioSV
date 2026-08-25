@@ -6,6 +6,22 @@
   <title>Sophia Vina — Portfolio</title>
   <meta name="description" content="Portfolio of Sophia Vina — AI student at Purdue, builder at the intersection of AI, business, and the things people actually use.">
 
+  <!-- Social preview. og:image must be an absolute URL — scrapers do not
+       resolve relative paths. Update these if the site moves to a custom domain. -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sosov04.github.io/PortfolioSV/">
+  <meta property="og:title" content="Sophia Vina — Portfolio">
+  <meta property="og:description" content="AI student at Purdue, building at the intersection of AI, business, and the things people actually use. Seven projects, 2024–2026.">
+  <meta property="og:image" content="https://sosov04.github.io/PortfolioSV/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Sophia Vina — portfolio card with headshot.">
+  <meta property="og:site_name" content="Sophia Vina">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sophia Vina — Portfolio">
+  <meta name="twitter:description" content="AI student at Purdue, building at the intersection of AI, business, and the things people actually use. Seven projects, 2024–2026.">
+  <meta name="twitter:image" content="https://sosov04.github.io/PortfolioSV/images/og-image.jpg">
+
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" href="images/favicon-32.png" type="image/png" sizes="32x32">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
@@ -796,7 +812,12 @@
         },
         walkthrough: {
           lede: "Vinya Voyage started as a design playground and turned into the thing I actually use. Photograph a label and it identifies the bottle; rate it and it goes in the journal; five-minute lessons on tannins, terroir, and appellations fill in the why behind what you just tasted. The streaks and XP are there because I wanted the habit to stick.",
-          sections: [],
+          sections: [
+            { heading: 'The problem', text: "Wine has a knowledge problem disguised as a taste problem. Everything written for beginners is either a wall of terminology or a scoring system that tells you what to think without telling you why. Meanwhile the moment you'd actually want to learn something — standing in front of a bottle, or halfway through a glass you like — is the one moment nothing is built for." },
+            { heading: 'What I built', text: "Three loops that feed each other. Log: photograph a label and the bottle is identified, rated, and filed. Learn: five-minute lessons split into Basics, Tasting, Regions, and Label Reading, each tagged with a read time and a level. Explore: everything you've logged as a timeline and on a map, so the regions fill in as you drink through them. Recommendations sit on top, scored by match percentage against what's already in your journal." },
+            { heading: 'Why it is gamified', text: "The hard part of learning wine is not comprehension, it's frequency — you get a few data points a week at most. Streaks, XP, and levels exist to make the small action cheap enough to repeat: log the glass, read one thing about it. The progress bar is doing the job a class would, spread out over months instead of a semester." },
+            { heading: 'What I took away', text: "The design playground framing let me build something without deciding upfront what it was for, and the thing it turned into was a habit tool rather than a reference. That reordering — behaviour first, content second — is the part I'd carry into the next build." }
+          ],
           links: []
         }
       },
@@ -913,7 +934,12 @@
         },
         walkthrough: {
           lede: "FieldAssist AI is a dashboard I built during the TechPoint Xtern Challenge, working on Cummins' field-technician data. Which team gets which job, in what order, with which parts available at which depot — none of that shows up in a spreadsheet in a way a supervisor can use in the moment. This is what would.",
-          sections: [],
+          sections: [
+            { heading: 'The problem', text: "Field service generates enormous amounts of structured data and almost none of it reaches the person deciding what happens next. A supervisor opening a queue of a couple hundred tickets has engine codes, risk levels, evidence status, and technician history in front of them — and no way to tell, at a glance, which twenty need them today. The work isn't analysis. It's triage, repeated all day, under time pressure." },
+            { heading: 'What I built', text: "A supervisor console over an agent pipeline. Tickets move through triage, evidence collection, and escalation, each handled by a separate agent that writes its reasoning and a confidence score back to the ticket. The dashboard puts the aggregate up front — total tickets, pending approval, approved today, average confidence — and splits the rest into an approval queue, the full ticket list, decision logs, and coaching logs." },
+            { heading: 'Keeping the human in the loop', text: "The part I care most about is that nothing auto-resolves. Every agent decision lands in an approval queue with the reasoning attached and a confidence number next to it, and every call is replayable in the decision log — which agent acted, on what evidence, and how sure it was. A rules fallback catches the cases the agents won't commit to. The system is built to be overruled, because a supervisor who can't see why won't trust it twice." },
+            { heading: 'What I took away', text: "Building against a real company's data rather than a tidy dataset changed what the interesting problem was. The modeling was the easy half; the hard half was designing the surface where a person accepts or rejects what the model said, fast, without reading a paragraph per ticket. That's a UI problem wearing an AI problem's clothes." }
+          ],
           links: []
         }
       },
