@@ -28,30 +28,50 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,500;1,9..144,600&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..600&family=JetBrains+Mono:wght@400..500&family=Source+Serif+4:opsz,wght@8..60,400..700&display=swap" rel="stylesheet">
 
   <style>
     /* ============================================
        DESIGN TOKENS
-       Palette matches Sophia's Building CEOs + YouIn decks:
-       cream base, deep navy ink, warm gold accent.
+       Warm near-white page, deep navy as both the ink and the
+       primary accent, brass used sparingly on small labels and
+       hover. Tuned against Sophia's headshot: navy blazer,
+       ivory blouse, cool grey wall.
+
+       Every value here clears WCAG AA against the surface it
+       is used on — see the ratios noted per token.
        ============================================ */
     :root {
-      --bg:            #F5EDD5;   /* warm cream — Building CEOs deck bg */
-      --bg-elevated:   #EBE1BF;   /* cards / hover surface */
-      --ink:           #14263D;   /* deep navy — Sophia's signature */
-      --ink-soft:      #3D4E68;
-      --muted:         #7B8299;
-      --navy-deep:     #0C1A2E;   /* darkest, for high-contrast surfaces */
-      --gold:          #B8923D;   /* warm gold accent */
-      --gold-bright:   #D9AB4A;   /* hover state */
-      --gold-soft:     #E4C874;   /* subtle highlight */
-      --line:          #D9CFA5;
-      --white:         #FDF9ED;
+      /* Surfaces — the page is the lightest thing; cards lift to
+         pure white; the expanded walkthrough recesses into a
+         faint warm tint so it reads as a drawer, not a card. */
+      --bg:          #FCFBF9;
+      --bg-alpha:    rgba(252, 251, 249, 0.88);  /* sticky header */
+      --surface:     #FFFFFF;                    /* project cards */
+      --surface-alt: #F6F4EF;                    /* walkthrough panel */
+      --white:       #FFFFFF;                    /* marks on dark scrims */
+
+      /* Ink */
+      --ink:       #14263D;   /* 14.77:1 on --bg */
+      --ink-soft:  #3A4A61;   /*  8.71:1 on --bg */
+      --muted:     #67707E;   /*  4.84:1 on --bg */
+      --navy-deep: #0C1A2E;
+
+      /* Accent — one brass, deep enough to pass AA at 11.5px.
+         A lighter brass (#9A7B3C) measures 3.85:1 and fails. */
+      --brass: #856831;       /*  5.05:1 on --bg */
+
+      /* Rules */
+      --line:        #E3DED4;   /* card borders, small dividers */
+      --line-strong: #D8D2C6;   /* section dividers, header rule */
+
+      /* Composable channels, so shadows and scrims stay tokenized */
+      --shadow-rgb: 20, 38, 61;
+      --scrim-rgb:  12, 26, 46;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    ::selection { background: var(--ink); color: var(--gold-soft); }
+    ::selection { background: var(--ink); color: var(--bg); }
 
     html {
       scroll-behavior: smooth;
@@ -63,20 +83,30 @@
     body {
       background: var(--bg);
       color: var(--ink);
-      font-family: 'Inter Tight', system-ui, -apple-system, sans-serif;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
       font-size: 1rem;
       line-height: 1.55;
     }
 
     /* ============================================
        TYPOGRAPHY
+
+       Contrast comes from family and weight, never from italic.
+       `font-optical-sizing: auto` lets Source Serif 4 pick its own
+       optical size per element — better than hand-picked
+       `font-variation-settings`, which resets unnamed axes and
+       drifts the moment a clamp() changes.
        ============================================ */
     .display {
-      font-family: 'Fraunces', Georgia, serif;
-      font-variation-settings: "opsz" 144;
+      font-family: 'Source Serif 4', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+      font-optical-sizing: auto;
       font-weight: 400;
-      line-height: 0.95;
-      letter-spacing: -0.025em;
+      /* Source Serif 4 has long descenders — 0.95 collided on the
+         two-line hero name. */
+      line-height: 1.04;
+      /* And it is already narrow and tightly fitted, so the old
+         -0.025em crashed the letterforms at display sizes. */
+      letter-spacing: -0.014em;
     }
 
     .mono {
@@ -105,11 +135,13 @@
        ============================================ */
     header {
       padding: 1.25rem 0;
-      border-bottom: 1px solid var(--line);
+      border-bottom: 1px solid var(--line-strong);
       position: sticky;
       top: 0;
-      background: rgba(245, 237, 213, 0.92);
-      backdrop-filter: blur(8px);
+      background: var(--bg-alpha);
+      /* Safari < 18 still needs the prefix, and it must come first. */
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
       z-index: 10;
     }
 
@@ -120,11 +152,11 @@
     }
 
     .logo {
-      font-family: 'Fraunces', serif;
-      font-variation-settings: "opsz" 24;
-      font-style: italic;
-      font-weight: 500;
-      font-size: 1.25rem;
+      font-family: 'Source Serif 4', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+      font-optical-sizing: auto;
+      font-weight: 600;
+      font-size: 1.15rem;
+      letter-spacing: -0.01em;
       color: var(--ink);
       text-decoration: none;
     }
@@ -137,7 +169,7 @@
       transition: color 0.2s;
     }
 
-    nav a:hover { color: var(--gold); }
+    nav a:hover { color: var(--ink); }
 
     @media (max-width: 500px) {
       nav a { margin-left: 1rem; font-size: 0.85rem; }
@@ -148,7 +180,7 @@
        ============================================ */
     .hero {
       padding: 5rem 0 4rem;
-      border-bottom: 1px solid var(--line);
+      border-bottom: 1px solid var(--line-strong);
     }
 
     .hero-grid {
@@ -166,33 +198,38 @@
       .hero-portrait { max-width: 320px; }
     }
 
-    .hero-text { max-width: 42rem; }
+    /* Inter fits wider than Inter Tight did, so the measure comes in. */
+    .hero-text { max-width: 40rem; }
 
     .hero-eyebrow {
-      color: var(--gold);
+      color: var(--brass);
       margin-bottom: 2rem;
       display: inline-block;
     }
 
     .hero-name {
-      font-size: clamp(3.25rem, 9vw, 7.5rem);
+      font-size: clamp(3.4rem, 9vw, 7.75rem);
       margin-bottom: 1.75rem;
     }
 
+    /* Emphasis by weight, in the same navy. Colouring a surname is
+       the deck-template move; a 400 -> 700 jump at this size is the
+       editorial one. */
     .hero-name em {
-      font-style: italic;
-      color: var(--gold);
-      font-variation-settings: "opsz" 144, "wght" 400;
+      font-style: normal;
+      font-weight: 700;
     }
 
     .hero-tagline {
-      font-family: 'Fraunces', serif;
-      font-variation-settings: "opsz" 30;
-      font-style: italic;
+      font-family: 'Source Serif 4', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+      font-optical-sizing: auto;
       font-weight: 400;
-      font-size: clamp(1.3rem, 2.3vw, 1.75rem);
-      color: var(--ink-soft);
-      line-height: 1.35;
+      font-size: clamp(1.35rem, 2.3vw, 1.8rem);
+      /* Full ink, not ink-soft: without italic, a muted line under the
+         name reads as a caption rather than a statement. */
+      color: var(--ink);
+      line-height: 1.4;
+      letter-spacing: -0.005em;
       margin-bottom: 2.5rem;
     }
 
@@ -212,7 +249,7 @@
       height: auto;
       display: block;
       border: 1px solid var(--line);
-      box-shadow: 0 12px 40px rgba(20, 38, 61, 0.12);
+      box-shadow: 0 14px 44px rgba(var(--shadow-rgb), 0.09);
     }
 
     .hero-portrait-caption {
@@ -230,15 +267,15 @@
       align-items: baseline;
       margin-bottom: 3rem;
       padding-bottom: 1rem;
-      border-bottom: 1px solid var(--line);
+      border-bottom: 1px solid var(--line-strong);
     }
 
     .section-title {
-      font-family: 'Fraunces', serif;
-      font-variation-settings: "opsz" 60;
+      font-family: 'Source Serif 4', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+      font-optical-sizing: auto;
       font-weight: 400;
-      font-size: clamp(1.75rem, 3vw, 2.25rem);
-      font-style: italic;
+      font-size: clamp(1.85rem, 3vw, 2.4rem);
+      letter-spacing: -0.01em;
     }
 
     .section-meta { color: var(--muted); }
@@ -258,9 +295,12 @@
       .project-grid { grid-template-columns: 1fr; gap: 1.5rem; }
     }
 
+    /* Every project card is the same size — two per row. A white card
+       on a warm near-white page separates by temperature as much as by
+       luminance, so the hairline border does the rest. */
     .project-card {
       grid-column: span 3;
-      background: var(--bg-elevated);
+      background: var(--surface);
       border: 1px solid var(--line);
       padding: 1.75rem;
       cursor: pointer;
@@ -271,17 +311,23 @@
       text-align: left;
     }
 
-    .project-card.wide { grid-column: span 6; }
+    /* Kept as a dormant escape hatch — the renderer still maps a
+       `size` field onto a class, but no project sets one. */
+    .project-card.wide { grid-column: span 3; }
 
     @media (max-width: 900px) {
       .project-card,
       .project-card.wide { grid-column: 1; }
     }
 
+    /* Two-layer shadow: the tight 2px/6px layer is the contact shadow
+       that makes the lift legible on a light page, while the wide layer
+       stays under 0.07 so it doesn't grey the background. */
     .project-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 30px rgba(20, 38, 61, 0.10);
-      border-color: var(--gold);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(var(--shadow-rgb), 0.07),
+                  0 2px  6px rgba(var(--shadow-rgb), 0.04);
+      border-color: var(--brass);
     }
 
     .project-thumb {
@@ -291,59 +337,60 @@
       justify-content: flex-start;
       padding: 1.25rem;
       color: var(--white);
-      font-family: 'Fraunces', serif;
-      font-style: italic;
-      font-size: 1.4rem;
+      font-family: 'Source Serif 4', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+      font-optical-sizing: auto;
+      font-weight: 500;
+      font-size: 1.35rem;
+      letter-spacing: -0.005em;
+      text-shadow: 0 1px 3px rgba(var(--scrim-rgb), 0.45);
       margin-bottom: 0.25rem;
       position: relative;
       overflow: hidden;
+      /* Longhand, not the `background` shorthand — the shorthand would
+         reset background-size/position declared alongside it. */
+      background-image: linear-gradient(160deg, var(--ink) 0%, var(--navy-deep) 100%);
       background-size: cover;
       background-position: center;
     }
 
-    /* Gradient fallbacks in the navy/gold/warm family. A project with a
-       `shots.thumb` in the data below paints its screenshot over the top;
-       these stay as the backdrop for any project not yet shot. */
-    .thumb-youin      { background: linear-gradient(135deg, #14263D 0%, #B8923D 100%); }
-    .thumb-vinya      { background: linear-gradient(135deg, #2B5470 0%, #14263D 100%); }
-    .thumb-charles    { background: linear-gradient(135deg, #1B3A5C 0%, #0C1A2E 100%); }
-    .thumb-ceos       { background: linear-gradient(135deg, #14263D 0%, #8B6E2A 100%); }
-    .thumb-xtern      { background: linear-gradient(135deg, #5A4020 0%, #14263D 100%); }
-    .thumb-boilerbite { background: linear-gradient(135deg, #A87A2A 0%, #14263D 100%); }
-    .thumb-rpvi       { background: linear-gradient(135deg, #3D5A6B 0%, #14263D 100%); }
-
-    /* The .thumb-* rules below use the `background` shorthand, which resets
-       background-size/position from .project-thumb back to their defaults.
-       This re-asserts them for cards that carry a real screenshot — it needs
-       the two-class specificity to win against .thumb-youin and friends. */
+    /* Real screenshots anchor to the top of the frame rather than the
+       centre, so headers and nav bars survive the 16:10 crop. */
     .project-thumb.has-shot {
-      background-size: cover;
       background-position: center top;
       background-repeat: no-repeat;
     }
 
-    /* Scrim so the title stays legible over a real screenshot. */
+    /* Scrim so the title stays legible over a real screenshot. It stays
+       dark deliberately: it sits over the screenshot, not over the page,
+       so a lighter page doesn't change what white text needs. If anything
+       it goes deeper — against a near-white page the eye adapts brighter,
+       and a mid-dark scrim starts reading as washed-out grey.
+       Worst case (white screenshot region) = 14.09:1. */
     .project-thumb.has-shot::after {
       content: '';
       position: absolute;
       inset: 0;
       background: linear-gradient(to top,
-        rgba(20, 38, 61, 0.90) 0%,
-        rgba(20, 38, 61, 0.55) 22%,
-        rgba(20, 38, 61, 0.14) 50%,
-        rgba(20, 38, 61, 0) 75%);
+        rgba(var(--scrim-rgb), 0.92) 0%,
+        rgba(var(--scrim-rgb), 0.58) 24%,
+        rgba(var(--scrim-rgb), 0.15) 52%,
+        rgba(var(--scrim-rgb), 0)    76%);
     }
 
     .thumb-label { position: relative; z-index: 1; }
 
-    .project-tag { color: var(--gold); }
+    .project-tag { color: var(--brass); }
 
     .project-title {
-      font-family: 'Fraunces', serif;
-      font-variation-settings: "opsz" 60;
-      font-weight: 500;
-      font-size: 1.75rem;
-      line-height: 1.05;
+      font-family: 'Source Serif 4', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+      font-optical-sizing: auto;
+      /* 600, not 500 — Source Serif 4's axis is gently graded and 500
+         barely separates from 400. Card titles need to be the loudest
+         thing after the thumb. */
+      font-weight: 600;
+      font-size: 1.8rem;
+      /* 1.05 collided: several titles wrap to two lines. */
+      line-height: 1.15;
     }
 
     .project-role {
@@ -358,7 +405,7 @@
     }
 
     .project-cta {
-      color: var(--gold);
+      color: var(--brass);
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.72rem;
       text-transform: uppercase;
@@ -393,10 +440,14 @@
     .walkthrough {
       grid-column: 1 / -1;
       padding: 3.5rem 2.5rem;
-      border-top: 2px solid var(--gold);
-      border-bottom: 2px solid var(--gold);
+      /* A navy top rule states "new section"; the bottom just closes
+         quietly. A heavy accent sandwich is a lot for a demoted colour. */
+      border-top: 2px solid var(--ink);
+      border-bottom: 1px solid var(--line-strong);
       margin: 1.5rem 0;
-      background: var(--white);
+      /* Cards lift white, the expanded panel recesses warm — if this were
+         also white it would have no edge against the cards around it. */
+      background: var(--surface-alt);
       animation: slideOpen 0.4s ease;
     }
 
@@ -441,10 +492,11 @@
       background: var(--ink);
       color: var(--bg);
     }
+    /* Deepen rather than hue-shift: ink-on-brass measures 2.93:1. */
     .btn-live:hover {
-      background: var(--gold);
-      border-color: var(--gold);
-      color: var(--ink);
+      background: var(--navy-deep);
+      border-color: var(--navy-deep);
+      color: var(--bg);
     }
 
     .walkthrough-close {
@@ -457,23 +509,23 @@
     }
 
     .walkthrough h3 {
-      font-family: 'Fraunces', serif;
-      font-variation-settings: "opsz" 96;
+      font-family: 'Source Serif 4', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+      font-optical-sizing: auto;
       font-weight: 400;
-      font-size: clamp(2rem, 5vw, 3rem);
-      font-style: italic;
-      line-height: 1.05;
+      font-size: clamp(2.1rem, 5vw, 3.1rem);
+      line-height: 1.1;
+      letter-spacing: -0.014em;
       margin-top: 0.5rem;
     }
 
     .walkthrough-lede {
-      font-family: 'Fraunces', serif;
-      font-variation-settings: "opsz" 30;
-      font-size: clamp(1.1rem, 1.7vw, 1.25rem);
+      font-family: 'Source Serif 4', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+      font-optical-sizing: auto;
+      font-size: clamp(1.15rem, 1.7vw, 1.3rem);
       color: var(--ink);
-      max-width: 45rem;
+      max-width: 42rem;
       margin: 1.5rem 0 3rem;
-      line-height: 1.55;
+      line-height: 1.5;
     }
 
     .walkthrough-photos {
@@ -491,7 +543,9 @@
       display: block;
       aspect-ratio: 4 / 3;
       overflow: hidden;
-      background: var(--ink);
+      /* Only visible during lazy-load — a light skeleton, not a navy
+         letterbox flashing in on a light page. */
+      background: var(--line);
       border: 1px solid var(--line);
     }
 
@@ -505,7 +559,7 @@
 
     .walkthrough-photo figcaption {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
+      font-size: 0.72rem;
       color: var(--muted);
       margin-top: 0.6rem;
       line-height: 1.5;
@@ -519,7 +573,8 @@
       .walkthrough-photo.wide .photo-frame { aspect-ratio: 4 / 3; }
     }
 
-    .walkthrough-story { max-width: 42rem; }
+    /* ~72 characters in Inter — where narrative prose wants to be. */
+    .walkthrough-story { max-width: 38rem; }
 
     .walkthrough-story p {
       margin-bottom: 1.25rem;
@@ -529,13 +584,12 @@
     }
 
     .walkthrough-story h4 {
-      font-family: 'Fraunces', serif;
-      font-variation-settings: "opsz" 30;
-      font-style: italic;
-      font-weight: 500;
+      font-family: 'Source Serif 4', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+      font-optical-sizing: auto;
+      font-weight: 600;
       color: var(--ink);
       margin: 2.5rem 0 0.75rem;
-      font-size: 1.35rem;
+      font-size: 1.3rem;
     }
 
     .walkthrough-story h4:first-child { margin-top: 0; }
@@ -550,13 +604,13 @@
     }
 
     .walkthrough-meta a {
-      color: var(--gold);
+      color: var(--brass);
       text-decoration: none;
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.72rem;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      border-bottom: 1px solid var(--gold);
+      border-bottom: 1px solid var(--brass);
       padding-bottom: 3px;
       transition: color 0.2s, border-color 0.2s;
     }
@@ -571,7 +625,7 @@
        ============================================ */
     .about {
       padding: 5rem 0;
-      border-top: 1px solid var(--line);
+      border-top: 1px solid var(--line-strong);
     }
 
     .about-grid {
@@ -585,21 +639,29 @@
       .about-grid { grid-template-columns: 1fr; gap: 2rem; }
     }
 
-    .about-label { color: var(--gold); }
+    .about-label { color: var(--brass); }
 
     .about-text {
-      font-family: 'Fraunces', serif;
-      font-variation-settings: "opsz" 30;
-      font-size: 1.3rem;
-      line-height: 1.5;
+      font-family: 'Source Serif 4', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+      font-optical-sizing: auto;
+      font-size: 1.28rem;
+      line-height: 1.6;
       color: var(--ink);
     }
 
     .about-text p { margin-bottom: 1.5rem; }
 
+    /* The one place brass touches prose. Weight alone is too blunt inside
+       a serif paragraph — 600 reads as a UI bold, not as emphasis — so the
+       text stays full ink at 13.9:1 and the accent is a hairline rule. */
     .about-text em {
-      font-style: italic;
-      color: var(--gold);
+      font-style: normal;
+      font-weight: 500;
+      color: var(--ink);
+      text-decoration: underline;
+      text-decoration-color: var(--brass);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.2em;
     }
 
     /* ============================================
@@ -607,13 +669,12 @@
        ============================================ */
     footer {
       padding: 5rem 0 3rem;
-      border-top: 1px solid var(--line);
+      border-top: 1px solid var(--line-strong);
       text-align: center;
     }
 
     footer .display {
       font-size: clamp(2.5rem, 6vw, 4rem);
-      font-style: italic;
       color: var(--ink);
       margin-bottom: 2rem;
     }
@@ -627,7 +688,7 @@
     }
 
     .footer-links a {
-      color: var(--gold);
+      color: var(--brass);
       text-decoration: none;
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.8rem;
@@ -635,10 +696,14 @@
       letter-spacing: 0.06em;
       border-bottom: 1px solid transparent;
       padding-bottom: 3px;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, color 0.2s;
     }
 
-    .footer-links a:hover { border-color: var(--gold); }
+    /* Darken on hover rather than only sprouting a rule. */
+    .footer-links a:hover {
+      color: var(--ink);
+      border-color: var(--ink);
+    }
 
     .footer-fine {
       color: var(--muted);
@@ -737,7 +802,7 @@
        ============================================ */
     const projects = [
 
-      /* ---------- YouIn — FEATURED ---------- */
+      /* ---------- YouIn ---------- */
       {
         id: 'youin',
         tag: '[Startup · 2025–2026]',
@@ -745,7 +810,6 @@
         role: 'Founder + Product',
         hook: 'A launched platform that turns campus events into shared, competitive experiences. Started as U-Bet — a Burton D. Morgan Venture Competition Special Finalist — now live with real users and a validated event playbook.',
         thumb: 'thumb-youin',
-        size: 'wide',
         url: 'https://youin-fawn.vercel.app/',
         shots: {
           thumb: 'images/projects/youin/thumb.jpg',
@@ -781,11 +845,13 @@
         }
       },
 
-      /* ---------- Vinya Voyage ---------- */
+      /* ---------- VinaVoyage ----------
+         `vinya` stays the internal slug (id, thumb class, image folder).
+         It is never rendered — do not chase it. */
       {
         id: 'vinya',
         tag: '[Personal · 2025]',
-        title: 'Vinya Voyage',
+        title: 'VinaVoyage',
         role: 'Designer + Builder',
         hook: 'A wine app that makes learning about wine something you do one bottle at a time — snap the label, log the pour, and watch the map fill in.',
         thumb: 'thumb-vinya',
@@ -794,7 +860,7 @@
           thumb: 'images/projects/vinya/thumb.jpg',
           hero: {
             src: 'images/projects/vinya/hero.jpg',
-            alt: 'The Vinya Voyage lesson library, with short courses on tannins, terroir, appellations, and reading a label, filtered by category.',
+            alt: 'The VinaVoyage lesson library, with short courses on tannins, terroir, appellations, and reading a label, filtered by category.',
             caption: 'The lesson library — five-minute courses, filtered by what you want to learn.'
           },
           details: [
@@ -811,7 +877,7 @@
           ]
         },
         walkthrough: {
-          lede: "Vinya Voyage started as a design playground and turned into the thing I actually use. Photograph a label and it identifies the bottle; rate it and it goes in the journal; five-minute lessons on tannins, terroir, and appellations fill in the why behind what you just tasted. The streaks and XP are there because I wanted the habit to stick.",
+          lede: "VinaVoyage started as a design playground and turned into the thing I actually use. Photograph a label and it identifies the bottle; rate it and it goes in the journal; five-minute lessons on tannins, terroir, and appellations fill in the why behind what you just tasted. The streaks and XP are there because I wanted the habit to stick.",
           sections: [
             { heading: 'The problem', text: "Wine has a knowledge problem disguised as a taste problem. Everything written for beginners is either a wall of terminology or a scoring system that tells you what to think without telling you why. Meanwhile the moment you'd actually want to learn something — standing in front of a bottle, or halfway through a glass you like — is the one moment nothing is built for." },
             { heading: 'What I built', text: "Three loops that feed each other. Log: photograph a label and the bottle is identified, rated, and filed. Learn: five-minute lessons split into Basics, Tasting, Regions, and Label Reading, each tagged with a read time and a level. Explore: everything you've logged as a timeline and on a map, so the regions fill in as you drink through them. Recommendations sit on top, scored by match percentage against what's already in your journal." },
