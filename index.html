@@ -671,6 +671,9 @@
       padding: 5rem 0 3rem;
       border-top: 1px solid var(--line-strong);
       text-align: center;
+      /* The sticky header would otherwise crop "Let's talk." when the
+         nav Contact link lands here. */
+      scroll-margin-top: 5rem;
     }
 
     footer .display {
@@ -705,6 +708,114 @@
       border-color: var(--ink);
     }
 
+    /* ---- Email: two addresses behind one label ----
+       There are two ways to reach her, and printing both in the row
+       would unbalance it against LinkedIn and GitHub. So the row keeps
+       one word and the addresses surface on hover, focus, or tap. */
+    .footer-email {
+      position: relative;
+      /* The panel is anchored to this wrapper, so it must not stretch
+         wider than the word it sits under. */
+      display: inline-flex;
+      align-items: center;
+    }
+
+    /* A button, not a link: it opens the panel rather than navigating,
+       which is also what makes it work on touch. Chrome is reset so it
+       reads as a sibling of the two anchors beside it. */
+    .footer-email-trigger {
+      background: none;
+      border: 0;
+      border-bottom: 1px solid transparent;
+      padding: 0 0 3px;
+      cursor: pointer;
+      color: var(--brass);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      line-height: 1.55;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .footer-email-trigger:hover,
+    .footer-email-trigger:focus-visible {
+      color: var(--ink);
+      border-color: var(--ink);
+    }
+
+    .footer-email-panel {
+      /* Centred over the label by default; the narrow-screen rule below
+         swaps this to a left edge, so both states share one offset. */
+      --panel-x: -50%;
+      position: absolute;
+      /* Below the row, not above: above would cover "Let's talk.", which
+         is the largest thing on the page. */
+      top: calc(100% + 0.75rem);
+      left: 50%;
+      z-index: 2;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 32px rgba(var(--shadow-rgb), 0.07),
+                  0 2px  6px rgba(var(--shadow-rgb), 0.04);
+      text-align: left;
+      white-space: nowrap;
+      /* Same fade-and-rise as .reveal, just faster and reversible. */
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(var(--panel-x)) translateY(-6px);
+      transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+    }
+
+    /* The 0.75rem gap below the trigger is dead space the pointer has to
+       cross; without this bridge the panel closes mid-travel. */
+    .footer-email-panel::after {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      left: 0;
+      right: 0;
+      height: 0.75rem;
+    }
+
+    .footer-email:hover .footer-email-panel,
+    .footer-email:focus-within .footer-email-panel,
+    .footer-email.open .footer-email-panel {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(var(--panel-x)) translateY(0);
+    }
+
+    /* Addresses are read verbatim, so they drop the uppercase the rest
+       of the mono labels carry. */
+    .footer-email-panel a {
+      display: block;
+      padding: 0.7rem 1.1rem;
+      color: var(--ink-soft);
+      font-size: 0.78rem;
+      text-transform: none;
+      letter-spacing: 0;
+      border-bottom: 0;
+    }
+
+    .footer-email-panel a + a {
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-email-panel a:hover {
+      color: var(--brass);
+      border-color: var(--line);
+    }
+
+    @media (max-width: 500px) {
+      /* Centred, the panel hangs off the left edge — the Email label is
+         the leftmost item in a centred row. Pin it to the label instead. */
+      .footer-email-panel {
+        --panel-x: 0;
+        left: 0;
+      }
+    }
+
     .footer-fine {
       color: var(--muted);
       font-size: 0.8rem;
@@ -732,7 +843,7 @@
       <nav>
         <a href="#work">Work</a>
         <a href="#about">About</a>
-        <a href="mailto:sophiemv2004@gmail.com">Contact</a>
+        <a href="#contact">Contact</a>
       </nav>
     </div>
   </header>
@@ -782,13 +893,19 @@
     </div>
   </section>
 
-  <footer>
+  <footer id="contact">
     <div class="container">
       <div class="display">Let's talk.</div>
       <div class="footer-links">
-        <a href="mailto:sophiemv2004@gmail.com">Email</a>
+        <div class="footer-email">
+          <button type="button" class="footer-email-trigger" aria-expanded="false" aria-controls="emailPanel">Email</button>
+          <div class="footer-email-panel" id="emailPanel">
+            <a href="mailto:sophiemv2004@gmail.com">sophiemv2004@gmail.com</a>
+            <a href="mailto:svina@purdue.edu">svina@purdue.edu</a>
+          </div>
+        </div>
         <a href="https://linkedin.com/in/sophia-vina" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/SosoV04" target="_blank" rel="noopener">GitHub</a>
       </div>
       <div class="footer-fine">Designed & built by Sophia Vina · 2026</div>
     </div>
@@ -1210,6 +1327,37 @@
       });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    /* ============================================
+       EMAIL PANEL
+
+       CSS handles mouse and keyboard on its own (:hover, :focus-within).
+       This exists for touch, where there is no hover: tap to open, tap
+       away or press Escape to close.
+       ============================================ */
+    const emailWrap = document.querySelector('.footer-email');
+    const emailBtn = emailWrap.querySelector('.footer-email-trigger');
+
+    const setEmailPanel = open => {
+      emailWrap.classList.toggle('open', open);
+      emailBtn.setAttribute('aria-expanded', String(open));
+    };
+
+    emailBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      setEmailPanel(!emailWrap.classList.contains('open'));
+    });
+
+    document.addEventListener('click', e => {
+      if (!emailWrap.contains(e.target)) setEmailPanel(false);
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && emailWrap.classList.contains('open')) {
+        setEmailPanel(false);
+        emailBtn.focus();
+      }
+    });
   </script>
 </body>
 </html>
