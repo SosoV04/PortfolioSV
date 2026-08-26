@@ -708,11 +708,12 @@
       border-color: var(--ink);
     }
 
-    /* ---- Email: two addresses behind one label ----
-       There are two ways to reach her, and printing both in the row
-       would unbalance it against LinkedIn and GitHub. So the row keeps
-       one word and the addresses surface on hover, focus, or tap. */
-    .footer-email {
+    /* ---- Footer popups ----
+       Each label in the row hides its details behind one word: Email has
+       two addresses, LinkedIn and GitHub have a URL worth copying.
+       Printing any of that inline would unbalance the row, so it surfaces
+       on hover, focus, or tap instead. */
+    .footer-pop {
       position: relative;
       /* The panel is anchored to this wrapper, so it must not stretch
          wider than the word it sits under. */
@@ -722,8 +723,8 @@
 
     /* A button, not a link: it opens the panel rather than navigating,
        which is also what makes it work on touch. Chrome is reset so it
-       reads as a sibling of the two anchors beside it. */
-    .footer-email-trigger {
+       reads as a sibling of the plain anchors elsewhere in the row. */
+    .footer-pop-trigger {
       background: none;
       border: 0;
       border-bottom: 1px solid transparent;
@@ -738,13 +739,13 @@
       transition: border-color 0.2s, color 0.2s;
     }
 
-    .footer-email-trigger:hover,
-    .footer-email-trigger:focus-visible {
+    .footer-pop-trigger:hover,
+    .footer-pop-trigger:focus-visible {
       color: var(--ink);
       border-color: var(--ink);
     }
 
-    .footer-email-panel {
+    .footer-pop-panel {
       /* Centred over the label by default; the narrow-screen rule below
          swaps this to a left edge, so both states share one offset. */
       --panel-x: -50%;
@@ -769,7 +770,7 @@
 
     /* The 0.75rem gap below the trigger is dead space the pointer has to
        cross; without this bridge the panel closes mid-travel. */
-    .footer-email-panel::after {
+    .footer-pop-panel::after {
       content: '';
       position: absolute;
       bottom: 100%;
@@ -778,41 +779,63 @@
       height: 0.75rem;
     }
 
-    .footer-email:hover .footer-email-panel,
-    .footer-email:focus-within .footer-email-panel,
-    .footer-email.open .footer-email-panel {
+    .footer-pop:hover .footer-pop-panel,
+    .footer-pop:focus-within .footer-pop-panel,
+    .footer-pop.open .footer-pop-panel {
       opacity: 1;
       visibility: visible;
       transform: translateX(var(--panel-x)) translateY(0);
     }
 
-    /* Addresses are read verbatim, so they drop the uppercase the rest
-       of the mono labels carry. */
-    .footer-email-panel a {
+    /* Addresses and URLs are read verbatim, so they drop the uppercase
+       the rest of the mono labels carry. */
+    .footer-pop-panel a,
+    .footer-pop-copy {
       display: block;
+      width: 100%;
       padding: 0.7rem 1.1rem;
       color: var(--ink-soft);
+      font-family: 'JetBrains Mono', monospace;
       font-size: 0.78rem;
+      line-height: 1.55;
+      text-align: left;
       text-transform: none;
       letter-spacing: 0;
-      border-bottom: 0;
+      border: 0;
     }
 
-    .footer-email-panel a + a {
+    /* The copy row is a button; strip the chrome so it matches the anchor
+       beneath it exactly. */
+    .footer-pop-copy {
+      background: none;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    /* :not() rather than `* + *` so this outweighs the `border: 0` above
+       — a bare universal selector would lose on specificity. */
+    .footer-pop-panel > :not(:first-child) {
       border-top: 1px solid var(--line);
     }
 
-    .footer-email-panel a:hover {
+    .footer-pop-panel a:hover,
+    .footer-pop-copy:hover {
       color: var(--brass);
       border-color: var(--line);
     }
 
     @media (max-width: 500px) {
-      /* Centred, the panel hangs off the left edge — the Email label is
-         the leftmost item in a centred row. Pin it to the label instead. */
-      .footer-email-panel {
+      /* Centred, the outer two panels hang off the viewport — their
+         labels sit at the ends of a centred row. Pin those to the label;
+         the middle one clears both edges on its own. */
+      .footer-pop--start .footer-pop-panel {
         --panel-x: 0;
         left: 0;
+      }
+      .footer-pop--end .footer-pop-panel {
+        --panel-x: 0;
+        left: auto;
+        right: 0;
       }
     }
 
@@ -862,7 +885,7 @@
         </div>
         <div class="hero-portrait">
           <img src="images/svina.jpg" alt="Sophia Vina" />
-          <div class="mono hero-portrait-caption">West Lafayette, IN</div>
+          <div class="mono hero-portrait-caption">Boston, MA</div>
         </div>
       </div>
     </div>
@@ -897,15 +920,27 @@
     <div class="container">
       <div class="display">Let's talk.</div>
       <div class="footer-links">
-        <div class="footer-email">
-          <button type="button" class="footer-email-trigger" aria-expanded="false" aria-controls="emailPanel">Email</button>
-          <div class="footer-email-panel" id="emailPanel">
+        <div class="footer-pop footer-pop--start">
+          <button type="button" class="footer-pop-trigger" aria-expanded="false" aria-controls="emailPanel">Email</button>
+          <div class="footer-pop-panel" id="emailPanel">
             <a href="mailto:sophiemv2004@gmail.com">sophiemv2004@gmail.com</a>
             <a href="mailto:svina@purdue.edu">svina@purdue.edu</a>
           </div>
         </div>
-        <a href="https://linkedin.com/in/sophia-vina" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://github.com/SosoV04" target="_blank" rel="noopener">GitHub</a>
+        <div class="footer-pop">
+          <button type="button" class="footer-pop-trigger" aria-expanded="false" aria-controls="liPanel">LinkedIn</button>
+          <div class="footer-pop-panel" id="liPanel">
+            <button type="button" class="footer-pop-copy" data-copy="https://linkedin.com/in/sophia-vina">linkedin.com/in/sophia-vina</button>
+            <a href="https://linkedin.com/in/sophia-vina" target="_blank" rel="noopener">Open profile &#8599;</a>
+          </div>
+        </div>
+        <div class="footer-pop footer-pop--end">
+          <button type="button" class="footer-pop-trigger" aria-expanded="false" aria-controls="ghPanel">GitHub</button>
+          <div class="footer-pop-panel" id="ghPanel">
+            <button type="button" class="footer-pop-copy" data-copy="https://github.com/SosoV04">github.com/SosoV04</button>
+            <a href="https://github.com/SosoV04" target="_blank" rel="noopener">Open profile &#8599;</a>
+          </div>
+        </div>
       </div>
       <div class="footer-fine">Designed & built by Sophia Vina · 2026</div>
     </div>
@@ -1329,34 +1364,83 @@
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
     /* ============================================
-       EMAIL PANEL
+       FOOTER POPUPS
 
        CSS handles mouse and keyboard on its own (:hover, :focus-within).
-       This exists for touch, where there is no hover: tap to open, tap
-       away or press Escape to close.
+       The `open` class exists for touch, where there is no hover: tap to
+       open, tap away or press Escape to close.
        ============================================ */
-    const emailWrap = document.querySelector('.footer-email');
-    const emailBtn = emailWrap.querySelector('.footer-email-trigger');
+    const pops = Array.from(document.querySelectorAll('.footer-pop'));
 
-    const setEmailPanel = open => {
-      emailWrap.classList.toggle('open', open);
-      emailBtn.setAttribute('aria-expanded', String(open));
+    const setPop = (wrap, open) => {
+      wrap.classList.toggle('open', open);
+      wrap.querySelector('.footer-pop-trigger')
+        .setAttribute('aria-expanded', String(open));
     };
 
-    emailBtn.addEventListener('click', e => {
-      e.stopPropagation();
-      setEmailPanel(!emailWrap.classList.contains('open'));
+    const closeAllPops = except => {
+      pops.forEach(p => { if (p !== except) setPop(p, false); });
+    };
+
+    pops.forEach(wrap => {
+      wrap.querySelector('.footer-pop-trigger').addEventListener('click', e => {
+        e.stopPropagation();
+        const open = !wrap.classList.contains('open');
+        closeAllPops(wrap);
+        setPop(wrap, open);
+      });
     });
 
     document.addEventListener('click', e => {
-      if (!emailWrap.contains(e.target)) setEmailPanel(false);
+      if (!pops.some(p => p.contains(e.target))) closeAllPops();
     });
 
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && emailWrap.classList.contains('open')) {
-        setEmailPanel(false);
-        emailBtn.focus();
-      }
+      if (e.key !== 'Escape') return;
+      const open = pops.find(p => p.classList.contains('open'));
+      if (!open) return;
+      setPop(open, false);
+      open.querySelector('.footer-pop-trigger').focus();
+    });
+
+    /* ---- Copy a URL to the clipboard ----
+       navigator.clipboard needs a secure context. The live site is HTTPS,
+       but opening this file over file:// can reject, so fall back to the
+       old execCommand path rather than failing silently. */
+    const legacyCopy = text => {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch (err) { /* nothing left to try */ }
+      document.body.removeChild(ta);
+    };
+
+    document.querySelectorAll('.footer-pop-copy').forEach(btn => {
+      const url = btn.dataset.copy;
+      const label = btn.textContent;
+      let revert;
+
+      btn.addEventListener('click', e => {
+        // Without this the document handler closes the panel and the
+        // confirmation is never seen.
+        e.stopPropagation();
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).catch(() => legacyCopy(url));
+        } else {
+          legacyCopy(url);
+        }
+
+        btn.textContent = 'Copied';
+        // Clear the pending revert so fast repeat clicks can't strand the
+        // row reading "Copied".
+        clearTimeout(revert);
+        revert = setTimeout(() => { btn.textContent = label; }, 1400);
+      });
     });
   </script>
 </body>
