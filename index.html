@@ -68,6 +68,65 @@
       /* Composable channels, so shadows and scrims stay tokenized */
       --shadow-rgb: 20, 38, 61;
       --scrim-rgb:  12, 26, 46;
+
+      /* Two serif stacks, not one. See the @font-face pair below for why
+         the display sizes and the text sizes cannot share a number. */
+      --serif-display: 'Source Serif Display Fallback', 'Iowan Old Style',
+                       'Palatino Linotype', Palatino, Georgia, serif;
+      --serif-text:    'Source Serif Text Fallback', 'Iowan Old Style',
+                       'Palatino Linotype', Palatino, Georgia, serif;
+    }
+
+    /* Until Source Serif 4 arrives, a platform serif stands in for it, and
+       the two do not set to the same width — so text reflows the moment the
+       webfont lands. Left alone that measured CLS 0.308 at 320px, where the
+       hero name wrapped to two lines in the stand-in and snapped back to one
+       ~4s in, dragging the whole page up 56.6px.
+
+       size-adjust fixes it by scaling the stand-in until it occupies the
+       same width. It takes two faces, though, because the ratio is not
+       constant: against Palatino Linotype, Source Serif 4 needs 88% at the
+       hero name's weight-700 display size but 101% at the tagline's text
+       size. A single value tuned to one end visibly breaks the other — 90%
+       held the name to one line but squeezed the tagline into two lines
+       where the real font needs three.
+
+       Measured per element, the two clusters are tight enough to serve:
+       display 88–97 (tuned to the hero name, the only one that measurably
+       shifted), text 99.7–101.1. .display pins line-height, so neither face
+       needs vertical metric overrides. */
+    @font-face {
+      font-family: 'Source Serif Display Fallback';
+      src: local('Iowan Old Style'), local('Palatino Linotype'),
+           local('Palatino'), local('Georgia'), local('Times New Roman');
+      size-adjust: 90%;
+    }
+
+    @font-face {
+      font-family: 'Source Serif Text Fallback';
+      src: local('Iowan Old Style'), local('Palatino Linotype'),
+           local('Palatino'), local('Georgia'), local('Times New Roman');
+      size-adjust: 100%;
+    }
+
+    /* Inter has the mirror-image problem: it sets 5.5% *wider* than the
+       system sans, so the hero bio gained a line when it swapped in, which
+       pushed the portrait down 30px — CLS 0.035 at 390px, the commonest
+       modern phone width. Two faces because the candidates do not cluster:
+       Segoe UI, Helvetica and Arial all land within 0.1% of each other,
+       but Roboto is 15% narrower and needs its own number. Roboto is
+       listed first so Android matches it before falling through. */
+    @font-face {
+      font-family: 'Inter Fallback Roboto';
+      src: local('Roboto');
+      size-adjust: 115%;
+    }
+
+    @font-face {
+      font-family: 'Inter Fallback';
+      src: local('Segoe UI'), local('Helvetica Neue'), local('Helvetica'),
+           local('Arial');
+      size-adjust: 105.5%;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -78,14 +137,24 @@
       font-size: 16px;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      /* iOS inflates type in some orientations without this, and the hero
+         name has under 10px of slack at 320px — it cannot absorb any. */
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
     }
 
     body {
       background: var(--bg);
       color: var(--ink);
-      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+      font-family: 'Inter', 'Inter Fallback Roboto', 'Inter Fallback',
+                   system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
       font-size: 1rem;
       line-height: 1.55;
+      /* Nothing overflows today, measured at every phone width. This is the
+         guard for the next long URL or unbroken token. Note we deliberately
+         do not reach for overflow-x: hidden — there is no overflow to hide,
+         and on html it would silently kill the sticky header. */
+      overflow-wrap: break-word;
     }
 
     /* ============================================
@@ -98,7 +167,7 @@
        drifts the moment a clamp() changes.
        ============================================ */
     .display {
-      font-family: 'Source Serif 4', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+      font-family: 'Source Serif 4', var(--serif-display);
       font-optical-sizing: auto;
       font-weight: 400;
       /* Source Serif 4 has long descenders — 0.95 collided on the
@@ -152,7 +221,7 @@
     }
 
     .logo {
-      font-family: 'Source Serif 4', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+      font-family: 'Source Serif 4', var(--serif-display);
       font-optical-sizing: auto;
       font-weight: 600;
       font-size: 1.15rem;
@@ -167,6 +236,19 @@
       font-size: 0.9rem;
       margin-left: 1.75rem;
       transition: color 0.2s;
+      position: relative;
+      display: inline-block;
+    }
+
+    /* The links measure 34x16 — three of them in a row, 16px apart, is a
+       hard tap. They sit on a baseline with the logo, so padding them would
+       drop the whole row; a transparent inset pseudo-element grows the hit
+       area to ~44px without moving a pixel. The horizontal inset is half
+       the narrow-screen gap, so neighbours meet without overlapping. */
+    nav a::after {
+      content: '';
+      position: absolute;
+      inset: -14px -8px;
     }
 
     nav a:hover { color: var(--ink); }
@@ -221,7 +303,7 @@
     }
 
     .hero-tagline {
-      font-family: 'Source Serif 4', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+      font-family: 'Source Serif 4', var(--serif-text);
       font-optical-sizing: auto;
       font-weight: 400;
       font-size: clamp(1.35rem, 2.3vw, 1.8rem);
@@ -271,7 +353,7 @@
     }
 
     .section-title {
-      font-family: 'Source Serif 4', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+      font-family: 'Source Serif 4', var(--serif-display);
       font-optical-sizing: auto;
       font-weight: 400;
       font-size: clamp(1.85rem, 3vw, 2.4rem);
@@ -280,10 +362,29 @@
 
     .section-meta { color: var(--muted); }
 
+    /* "Selected work" and its mono counter need 370px to share a line; a
+       390px phone offers 350, and it only clears at 430. Rather than let
+       space-between wrap both halves into two ragged columns, stack them:
+       the rule below still closes the header, and the counter reads as a
+       standfirst under the title. */
+    @media (max-width: 500px) {
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
+      }
+    }
+
     /* ============================================
        PROJECT GRID
        ============================================ */
     .projects { padding: 5rem 0; }
+
+    /* The nav links scroll to these, and without a margin the sticky header
+       lands on top of the very heading you just asked for — same reason
+       footer and .walkthrough each carry one. */
+    .projects,
+    .about { scroll-margin-top: 5rem; }
 
     .project-grid {
       display: grid;
@@ -322,12 +423,33 @@
 
     /* Two-layer shadow: the tight 2px/6px layer is the contact shadow
        that makes the lift legible on a light page, while the wide layer
-       stays under 0.07 so it doesn't grey the background. */
-    .project-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(var(--shadow-rgb), 0.07),
-                  0 2px  6px rgba(var(--shadow-rgb), 0.04);
+       stays under 0.07 so it doesn't grey the background.
+
+       Gated, because on iOS a tap latches :hover until the next tap lands
+       somewhere else — ungated, the card stays lifted for as long as you
+       are reading the walkthrough underneath it. */
+    @media (hover: hover) {
+      .project-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 32px rgba(var(--shadow-rgb), 0.07),
+                    0 2px  6px rgba(var(--shadow-rgb), 0.04);
+        border-color: var(--brass);
+      }
+    }
+
+    /* What touch gets instead. The UA tap highlight is a cyan that belongs
+       to no token here, so it goes; the card settles rather than lifting,
+       which is the hover vocabulary inverted. */
+    .project-card { -webkit-tap-highlight-color: transparent; }
+
+    .project-card:active {
+      transform: translateY(1px);
       border-color: var(--brass);
+    }
+
+    .project-card:focus-visible {
+      outline: 2px solid var(--brass);
+      outline-offset: 3px;
     }
 
     .project-thumb {
@@ -337,7 +459,7 @@
       justify-content: flex-start;
       padding: 1.25rem;
       color: var(--white);
-      font-family: 'Source Serif 4', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+      font-family: 'Source Serif 4', var(--serif-display);
       font-optical-sizing: auto;
       font-weight: 500;
       font-size: 1.35rem;
@@ -382,7 +504,7 @@
     .project-tag { color: var(--brass); }
 
     .project-title {
-      font-family: 'Source Serif 4', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+      font-family: 'Source Serif 4', var(--serif-display);
       font-optical-sizing: auto;
       /* 600, not 500 — Source Serif 4's axis is gently graded and 500
          barely separates from 400. Card titles need to be the loudest
@@ -427,6 +549,15 @@
       padding-bottom: 2px;
       white-space: nowrap;
       transition: color 0.2s, border-color 0.2s;
+      position: relative;
+    }
+
+    /* Same trick as the nav links: the underline has to stay tight to the
+       word, so the hit area grows behind it instead. */
+    .card-visit::after {
+      content: '';
+      position: absolute;
+      inset: -12px -10px;
     }
 
     .card-visit:hover {
@@ -449,6 +580,10 @@
          also white it would have no edge against the cards around it. */
       background: var(--surface-alt);
       animation: slideOpen 0.4s ease;
+      /* Same reason the footer carries one: openWalkthrough scrolls this to
+         block:'start', and without a margin the sticky header eats the tag
+         line outright and butts up against the title. */
+      scroll-margin-top: 5rem;
     }
 
     @keyframes slideOpen {
@@ -473,6 +608,20 @@
       display: flex;
       gap: 0.75rem;
       flex-shrink: 0;
+    }
+
+    @media (max-width: 500px) {
+      /* flex-shrink: 0 is right on a wide panel — the buttons should never
+         be squeezed by a long title. At 320px, though, the pair measures
+         264px inside a 240px content box and Close ends up sitting outside
+         the panel's own edge, floating on the page. Letting the group shrink
+         is what lets it wrap; wrap alone does nothing, because a box that
+         cannot shrink never exceeds its own width and so never wraps. */
+      .walkthrough-actions {
+        flex-shrink: 1;
+        flex-wrap: wrap;
+        min-width: 0;
+      }
     }
 
     .btn-live, .walkthrough-close {
@@ -508,8 +657,16 @@
       color: var(--bg);
     }
 
+    /* The 0.55rem above gives a 37px button — right for a mouse, 7px short
+       for a thumb. Must come after that rule, not before: a media query
+       adds no specificity, so the plain declaration would otherwise win. */
+    @media (pointer: coarse) {
+      .btn-live,
+      .walkthrough-close { padding: 0.8rem 1rem; }
+    }
+
     .walkthrough h3 {
-      font-family: 'Source Serif 4', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+      font-family: 'Source Serif 4', var(--serif-display);
       font-optical-sizing: auto;
       font-weight: 400;
       font-size: clamp(2.1rem, 5vw, 3.1rem);
@@ -519,7 +676,7 @@
     }
 
     .walkthrough-lede {
-      font-family: 'Source Serif 4', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+      font-family: 'Source Serif 4', var(--serif-text);
       font-optical-sizing: auto;
       font-size: clamp(1.15rem, 1.7vw, 1.3rem);
       color: var(--ink);
@@ -570,7 +727,12 @@
 
     @media (max-width: 768px) {
       .walkthrough-photos { grid-template-columns: 1fr; }
-      .walkthrough-photo.wide .photo-frame { aspect-ratio: 4 / 3; }
+      /* The wide frame deliberately keeps 16/8 here. Every image in this
+         set is authored to the frame it sits in — heroes 1600x800, details
+         800x600, thumbs 1200x750 — and squeezing the hero frame to 4/3 on
+         a phone made object-fit: cover crop a third of the slide's width
+         off, which is exactly the third with the numbers on it. At 350px
+         the frame is 175px tall, which is short but whole. */
     }
 
     /* ~72 characters in Inter — where narrative prose wants to be. */
@@ -584,7 +746,7 @@
     }
 
     .walkthrough-story h4 {
-      font-family: 'Source Serif 4', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+      font-family: 'Source Serif 4', var(--serif-text);
       font-optical-sizing: auto;
       font-weight: 600;
       color: var(--ink);
@@ -620,6 +782,15 @@
       border-color: var(--ink);
     }
 
+    /* The panel runs two to four screens on a phone — FieldAssist is 3350px
+       at 320px — and Close only existed at the top of it. Repeat it at the
+       foot so finishing the story and leaving it are the same gesture. */
+    .walkthrough-foot {
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--line);
+    }
+
     /* ============================================
        ABOUT
        ============================================ */
@@ -635,14 +806,18 @@
       align-items: start;
     }
 
-    @media (max-width: 800px) {
+    /* 900, matching the grids above. At 800 this section went two-column
+       for a 100px band while the project cards above it were already
+       stacked full-width, which read as a mistake even though nothing
+       actually broke. */
+    @media (max-width: 900px) {
       .about-grid { grid-template-columns: 1fr; gap: 2rem; }
     }
 
     .about-label { color: var(--brass); }
 
     .about-text {
-      font-family: 'Source Serif 4', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+      font-family: 'Source Serif 4', var(--serif-text);
       font-optical-sizing: auto;
       font-size: 1.28rem;
       line-height: 1.6;
@@ -737,6 +912,14 @@
       text-transform: uppercase;
       letter-spacing: 0.06em;
       transition: border-color 0.2s, color 0.2s;
+      position: relative;
+    }
+
+    /* 42x24 is under a thumb's worth. Grow the hit area behind the word. */
+    .footer-pop-trigger::after {
+      content: '';
+      position: absolute;
+      inset: -11px -12px;
     }
 
     .footer-pop-trigger:hover,
@@ -779,12 +962,25 @@
       height: 0.75rem;
     }
 
-    .footer-pop:hover .footer-pop-panel,
+    /* :focus-within is the keyboard path, .open is the touch path. */
     .footer-pop:focus-within .footer-pop-panel,
     .footer-pop.open .footer-pop-panel {
       opacity: 1;
       visibility: visible;
       transform: translateX(var(--panel-x)) translateY(0);
+    }
+
+    /* :hover has to be gated, and here it is worse than cosmetic. The JS
+       toggles .open, but :hover is a separate branch of the same rule: on
+       iOS a second tap sets open false and aria-expanded false while the
+       latched :hover holds the panel visible — the panel stays on screen
+       while the accessibility tree says it is closed. */
+    @media (hover: hover) {
+      .footer-pop:hover .footer-pop-panel {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(var(--panel-x)) translateY(0);
+      }
     }
 
     /* Addresses and URLs are read verbatim, so they drop the uppercase
@@ -856,7 +1052,50 @@
       opacity: 1;
       transform: translateY(0);
     }
-  </style>
+
+    /* ============================================
+       PHONE
+
+       Everything above is the desktop design. This block is the only place
+       the phone diverges, so the two are easy to keep in sync.
+       ============================================ */
+    @media (max-width: 500px) {
+      /* 5rem is a printed-page margin. On a 375px screen it is a fifth of
+         the viewport spent on nothing before the first card, four times
+         over. Note footer's scroll-margin-top stays at 5rem — that is
+         compensating for the sticky header, not setting rhythm. */
+      .hero     { padding: 3rem 0 2.5rem; }
+      .projects { padding: 3rem 0; }
+      .about    { padding: 3rem 0; }
+      footer    { padding: 3rem 0 2rem; }
+      .section-header { margin-bottom: 2rem; }
+
+      /* 11.5px uppercase with 0.06em tracking is a caption size on a
+         desktop and a squint on a phone. One notch up; the brass was
+         picked to clear AA at the smaller size, so this only helps it. */
+      .mono,
+      .project-cta,
+      .walkthrough-photo figcaption,
+      .walkthrough-meta a { font-size: 0.78rem; }
+    }
+
+    /* ============================================
+       REDUCED MOTION
+
+       Seven cards rising in sequence, a 0.4s drawer, and a smooth scroll
+       that can cross three screens on a phone. openWalkthrough checks the
+       same query, because scrollIntoView's own behavior option would
+       otherwise override scroll-behavior below.
+       ============================================ */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal,
+      .reveal.visible { opacity: 1; transform: none; transition: none; }
+      .walkthrough { animation: none; }
+      .footer-pop-panel { transition: none; }
+      .project-card { transition: none; }
+    }
+</style>
 </head>
 <body>
 
@@ -884,7 +1123,7 @@
           <p class="hero-bio">I'm a rising senior at Purdue studying AI, with minors in Management and Entrepreneurship, which is basically my way of making sure I never have to pick just one lane. I love jumping into projects at the intersection of technology, business, and innovation, especially when they don't fit neatly into a single box.</p>
         </div>
         <div class="hero-portrait">
-          <img src="images/svina.jpg" alt="Sophia Vina" />
+          <img src="images/svina.jpg" alt="Sophia Vina" width="900" height="1190" />
           <div class="mono hero-portrait-caption">Boston, MA</div>
         </div>
       </div>
@@ -1249,6 +1488,11 @@
       const card = document.createElement('article');
       card.className = 'project-card reveal' + (p.size ? ' ' + p.size : '');
       card.dataset.id = p.id;
+      /* The card is the control that opens the walkthrough, so it has to
+         say so and be reachable without a pointer. */
+      card.tabIndex = 0;
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-expanded', 'false');
       const thumbSrc = p.shots && p.shots.thumb;
       card.innerHTML = `
         <div class="project-thumb ${p.thumb}${thumbSrc ? ' has-shot' : ''}"${
@@ -1264,7 +1508,21 @@
           ${p.url ? `<a href="${p.url}" target="_blank" rel="noopener" class="card-visit">Visit ↗</a>` : ''}
         </div>
       `;
-      card.addEventListener('click', () => openWalkthrough(p, card));
+      /* A second tap on the card that opened it puts it away. On a phone
+         the panel runs several screens, so this is the only exit that
+         doesn't cost a scroll back to the top. */
+      card.addEventListener('click', () => {
+        const open = grid.querySelector('.walkthrough');
+        if (open && open.dataset.for === p.id) { closeWalkthrough(open); return; }
+        openWalkthrough(p, card);
+      });
+
+      card.addEventListener('keydown', e => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        e.preventDefault();
+        card.click();
+      });
+
       grid.appendChild(card);
 
       /* Let the Visit link navigate without also expanding the walkthrough. */
@@ -1275,11 +1533,23 @@
     /* ============================================
        WALKTHROUGH
        ============================================ */
+    /* One exit path for every way out — the two Close buttons, a second tap
+       on the card, and opening a different one — so aria-expanded can never
+       drift from what is actually on screen. */
+    function closeWalkthrough(w) {
+      const owner = grid.querySelector('.project-card[data-id="' + w.dataset.for + '"]');
+      if (owner) owner.setAttribute('aria-expanded', 'false');
+      w.remove();
+    }
+
     function openWalkthrough(p, sourceCard) {
-      document.querySelectorAll('.walkthrough').forEach(w => w.remove());
+      grid.querySelectorAll('.walkthrough').forEach(closeWalkthrough);
 
       const w = document.createElement('div');
       w.className = 'walkthrough';
+      /* Lets the card's click handler recognise its own open panel. */
+      w.dataset.for = p.id;
+      sourceCard.setAttribute('aria-expanded', 'true');
 
       const liveButton = p.url
         ? `<a href="${p.url}" target="_blank" rel="noopener" class="btn-live">Visit live site ↗</a>`
@@ -1330,10 +1600,19 @@
         ${photosHTML}
         ${storyHTML}
         ${metaHTML}
+        <div class="walkthrough-foot">
+          <button class="walkthrough-close">Close walkthrough ×</button>
+        </div>
       `;
       insertAfterRow(sourceCard, w);
-      w.querySelector('.walkthrough-close').addEventListener('click', () => w.remove());
-      w.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      /* Two of them now: one in the header, one at the foot. */
+      w.querySelectorAll('.walkthrough-close')
+        .forEach(b => b.addEventListener('click', () => closeWalkthrough(w)));
+
+      /* scrollIntoView's own option would override scroll-behavior, so the
+         reduced-motion query has to be checked here too. */
+      const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      w.scrollIntoView({ behavior: still ? 'auto' : 'smooth', block: 'start' });
     }
 
     function insertAfterRow(sourceCard, walkEl) {
