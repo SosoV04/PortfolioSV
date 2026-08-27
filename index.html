@@ -1236,82 +1236,42 @@
         }
       },
 
-      /* ---------- VinaVoyage ----------
-         `vinya` stays the internal slug (id, thumb class, image folder).
-         It is never rendered — do not chase it. */
+      /* ---------- Xtern Challenge — FieldAssist AI ---------- */
       {
-        id: 'vinya',
-        tag: '[Personal · 2025]',
-        title: 'VinaVoyage',
-        role: 'Designer + Builder',
-        hook: 'A wine app that makes learning about wine something you do one bottle at a time: snap the label, log the pour, and watch the map fill in.',
-        thumb: 'thumb-vinya',
-        url: 'https://vina-voyage.vercel.app/',
+        id: 'xtern',
+        tag: '[Dashboard · 2025]',
+        title: 'FieldAssist AI: Xtern Challenge',
+        role: 'Analyst + Designer',
+        hook: "A field-technician job-optimization dashboard built for the TechPoint Xtern Challenge with Cummins, turning messy field data into decisions leads could act on.",
+        thumb: 'thumb-xtern',
+        url: 'https://cummins.firley.net/',
         shots: {
-          thumb: 'images/projects/vinya/thumb.jpg',
+          thumb: 'images/projects/xtern/thumb.jpg',
           hero: {
-            src: 'images/projects/vinya/hero.jpg',
-            alt: 'The VinaVoyage lesson library, with short courses on tannins, terroir, appellations, and reading a label, filtered by category.',
-            caption: 'The lesson library: five-minute courses, filtered by what you want to learn.'
+            src: 'images/projects/xtern/hero.jpg',
+            alt: 'The FieldAssist AI back-office dashboard showing the ticket queue with status and priority columns.',
+            caption: 'The back-office dashboard: every open ticket, triaged by status and priority.'
           },
           details: [
             {
-              src: 'images/projects/vinya/01.jpg',
-              alt: 'The wine logging screen, which identifies a bottle from a photo of its label.',
-              caption: 'Log a bottle by photographing the label, or search by hand.'
+              src: 'images/projects/xtern/01.jpg',
+              alt: 'The decision log view, listing which agent made each routing call and why.',
+              caption: 'Decision logs: every routing call is attributable to an agent and a reason.'
             },
             {
-              src: 'images/projects/vinya/02.jpg',
-              alt: 'The explore timeline, listing logged wines with ratings, regions, and dates.',
-              caption: 'Everything logged, as a timeline and on a map of the regions.'
+              src: 'images/projects/xtern/02.jpg',
+              alt: 'The coaching log view, showing follow-up guidance attached to individual tickets.',
+              caption: 'Coaching logs: the follow-up a supervisor would otherwise have to remember.'
             }
           ]
         },
         walkthrough: {
-          lede: "VinaVoyage started as a design playground and turned into the thing I actually use. Photograph a label and it identifies the bottle; rate it and it goes in the journal; five-minute lessons on tannins, terroir, and appellations fill in the why behind what you just tasted. The streaks and XP are there because I wanted the habit to stick.",
+          lede: "FieldAssist AI is a dashboard I built during the TechPoint Xtern Challenge, working on Cummins' field-technician data. Which team gets which job, in what order, with which parts available at which depot: none of that shows up in a spreadsheet in a way a supervisor can use in the moment. This is what would.",
           sections: [
-            { heading: 'The problem', text: "Wine has a knowledge problem disguised as a taste problem. Everything written for beginners is either a wall of terminology or a scoring system that tells you what to think without telling you why. Meanwhile the moment you'd actually want to learn something, standing in front of a bottle or halfway through a glass you like, is the one moment nothing is built for." },
-            { heading: 'What I built', text: "Three loops that feed each other. Log: photograph a label and the bottle is identified, rated, and filed. Learn: five-minute lessons split into Basics, Tasting, Regions, and Label Reading, each tagged with a read time and a level. Explore: everything you've logged as a timeline and on a map, so the regions fill in as you drink through them. Recommendations sit on top, scored by match percentage against what's already in your journal." },
-            { heading: 'Why it is gamified', text: "The hard part of learning wine is not comprehension, it's frequency; you get a few data points a week at most. Streaks, XP, and levels exist to make the small action cheap enough to repeat: log the glass, read one thing about it. The progress bar is doing the job a class would, spread out over months instead of a semester." },
-            { heading: 'What I took away', text: "The design playground framing let me build something without deciding upfront what it was for, and the thing it turned into was a habit tool rather than a reference. That reordering, behaviour first and content second, is the part I'd carry into the next build." }
-          ],
-          links: []
-        }
-      },
-
-      /* ---------- Charles Riverboat Narrator ---------- */
-      {
-        id: 'charles',
-        tag: '[Client Work · 2024]',
-        title: 'Charles Riverboat Narrator',
-        role: 'Designer + Builder',
-        hook: "A live tour-narrator microsite for Charles River Boat Company, so international guests can follow along in their own language while they're on the water.",
-        thumb: 'thumb-charles',
-        url: 'https://sosov04.github.io/CharlesRiverBoatNarrator/',
-        shots: {
-          thumb: 'images/projects/charles/thumb.jpg',
-          hero: {
-            src: 'images/projects/charles/hero.jpg',
-            alt: 'The Charles River Boat Company narrator running in English, with the tour script following the boat along the river.',
-            caption: 'The English tour, live: each line highlights as the boat moves.'
-          },
-          details: [
-            {
-              src: 'images/projects/charles/01.jpg',
-              alt: 'The same tour narration rendered in Spanish.',
-              caption: 'Español: the same narration, same timing.'
-            },
-            {
-              src: 'images/projects/charles/02.jpg',
-              alt: 'The same tour narration rendered in Chinese.',
-              caption: '中文: six languages ship from one script.'
-            }
-          ]
-        },
-        walkthrough: {
-          lede: "A GitHub Pages microsite I built for the Charles River Boat Company, where I work seasonally. The tour narrator runs on the guest's phone as the boat moves, so someone visiting from Japan or Brazil can follow the same story about MIT, Fenway, and the Longfellow Bridge that the English-speaking guests are hearing live.",
-          sections: [
-            { heading: 'Why it exists', text: "Between the sales team and the ops team, the ask I kept hearing every season was the same: international guests wanted more than a laminated pamphlet, and the captains couldn't translate 45 minutes of live commentary on the fly. A phone-first, tour-synced microsite was the smallest thing that actually solved it." }
+            { heading: 'The problem', text: "Field service generates enormous amounts of structured data and almost none of it reaches the person deciding what happens next. A supervisor opening a queue of a couple hundred tickets has engine codes, risk levels, evidence status, and technician history in front of them, and no way to tell, at a glance, which twenty need them today. The work isn't analysis. It's triage, repeated all day, under time pressure." },
+            { heading: 'What I built', text: "A supervisor console over an agent pipeline. Tickets move through triage, evidence collection, and escalation, each handled by a separate agent that writes its reasoning and a confidence score back to the ticket. The dashboard puts the aggregate up front: total tickets, pending approval, approved today, and average confidence. The rest splits into an approval queue, the full ticket list, decision logs, and coaching logs." },
+            { heading: 'Keeping the human in the loop', text: "The part I care most about is that nothing auto-resolves. Every agent decision lands in an approval queue with the reasoning attached and a confidence number next to it, and every call is replayable in the decision log: which agent acted, on what evidence, and how sure it was. A rules fallback catches the cases the agents won't commit to. The system is built to be overruled, because a supervisor who can't see why won't trust it twice." },
+            { heading: 'What I took away', text: "Building against a real company's data rather than a tidy dataset changed what the interesting problem was. The modeling was the easy half; the hard half was designing the surface where a person accepts or rejects what the model said, fast, without reading a paragraph per ticket. That's a UI problem wearing an AI problem's clothes." }
           ],
           links: []
         }
@@ -1360,42 +1320,44 @@
         }
       },
 
-      /* ---------- Xtern Challenge — FieldAssist AI ---------- */
+      /* ---------- VinaVoyage ----------
+         `vinya` stays the internal slug (id, thumb class, image folder).
+         It is never rendered — do not chase it. */
       {
-        id: 'xtern',
-        tag: '[Dashboard · 2025]',
-        title: 'FieldAssist AI: Xtern Challenge',
-        role: 'Analyst + Designer',
-        hook: "A field-technician job-optimization dashboard built for the TechPoint Xtern Challenge with Cummins, turning messy field data into decisions leads could act on.",
-        thumb: 'thumb-xtern',
-        url: 'https://cummins.firley.net/',
+        id: 'vinya',
+        tag: '[Personal · 2025]',
+        title: 'VinaVoyage',
+        role: 'Designer + Builder',
+        hook: 'A wine app that makes learning about wine something you do one bottle at a time: snap the label, log the pour, and watch the map fill in.',
+        thumb: 'thumb-vinya',
+        url: 'https://vina-voyage.vercel.app/',
         shots: {
-          thumb: 'images/projects/xtern/thumb.jpg',
+          thumb: 'images/projects/vinya/thumb.jpg',
           hero: {
-            src: 'images/projects/xtern/hero.jpg',
-            alt: 'The FieldAssist AI back-office dashboard showing the ticket queue with status and priority columns.',
-            caption: 'The back-office dashboard: every open ticket, triaged by status and priority.'
+            src: 'images/projects/vinya/hero.jpg',
+            alt: 'The VinaVoyage lesson library, with short courses on tannins, terroir, appellations, and reading a label, filtered by category.',
+            caption: 'The lesson library: five-minute courses, filtered by what you want to learn.'
           },
           details: [
             {
-              src: 'images/projects/xtern/01.jpg',
-              alt: 'The decision log view, listing which agent made each routing call and why.',
-              caption: 'Decision logs: every routing call is attributable to an agent and a reason.'
+              src: 'images/projects/vinya/01.jpg',
+              alt: 'The wine logging screen, which identifies a bottle from a photo of its label.',
+              caption: 'Log a bottle by photographing the label, or search by hand.'
             },
             {
-              src: 'images/projects/xtern/02.jpg',
-              alt: 'The coaching log view, showing follow-up guidance attached to individual tickets.',
-              caption: 'Coaching logs: the follow-up a supervisor would otherwise have to remember.'
+              src: 'images/projects/vinya/02.jpg',
+              alt: 'The explore timeline, listing logged wines with ratings, regions, and dates.',
+              caption: 'Everything logged, as a timeline and on a map of the regions.'
             }
           ]
         },
         walkthrough: {
-          lede: "FieldAssist AI is a dashboard I built during the TechPoint Xtern Challenge, working on Cummins' field-technician data. Which team gets which job, in what order, with which parts available at which depot: none of that shows up in a spreadsheet in a way a supervisor can use in the moment. This is what would.",
+          lede: "VinaVoyage started as a design playground and turned into the thing I actually use. Photograph a label and it identifies the bottle; rate it and it goes in the journal; five-minute lessons on tannins, terroir, and appellations fill in the why behind what you just tasted. The streaks and XP are there because I wanted the habit to stick.",
           sections: [
-            { heading: 'The problem', text: "Field service generates enormous amounts of structured data and almost none of it reaches the person deciding what happens next. A supervisor opening a queue of a couple hundred tickets has engine codes, risk levels, evidence status, and technician history in front of them, and no way to tell, at a glance, which twenty need them today. The work isn't analysis. It's triage, repeated all day, under time pressure." },
-            { heading: 'What I built', text: "A supervisor console over an agent pipeline. Tickets move through triage, evidence collection, and escalation, each handled by a separate agent that writes its reasoning and a confidence score back to the ticket. The dashboard puts the aggregate up front: total tickets, pending approval, approved today, and average confidence. The rest splits into an approval queue, the full ticket list, decision logs, and coaching logs." },
-            { heading: 'Keeping the human in the loop', text: "The part I care most about is that nothing auto-resolves. Every agent decision lands in an approval queue with the reasoning attached and a confidence number next to it, and every call is replayable in the decision log: which agent acted, on what evidence, and how sure it was. A rules fallback catches the cases the agents won't commit to. The system is built to be overruled, because a supervisor who can't see why won't trust it twice." },
-            { heading: 'What I took away', text: "Building against a real company's data rather than a tidy dataset changed what the interesting problem was. The modeling was the easy half; the hard half was designing the surface where a person accepts or rejects what the model said, fast, without reading a paragraph per ticket. That's a UI problem wearing an AI problem's clothes." }
+            { heading: 'The problem', text: "Wine has a knowledge problem disguised as a taste problem. Everything written for beginners is either a wall of terminology or a scoring system that tells you what to think without telling you why. Meanwhile the moment you'd actually want to learn something, standing in front of a bottle or halfway through a glass you like, is the one moment nothing is built for." },
+            { heading: 'What I built', text: "Three loops that feed each other. Log: photograph a label and the bottle is identified, rated, and filed. Learn: five-minute lessons split into Basics, Tasting, Regions, and Label Reading, each tagged with a read time and a level. Explore: everything you've logged as a timeline and on a map, so the regions fill in as you drink through them. Recommendations sit on top, scored by match percentage against what's already in your journal." },
+            { heading: 'Why it is gamified', text: "The hard part of learning wine is not comprehension, it's frequency; you get a few data points a week at most. Streaks, XP, and levels exist to make the small action cheap enough to repeat: log the glass, read one thing about it. The progress bar is doing the job a class would, spread out over months instead of a semester." },
+            { heading: 'What I took away', text: "The design playground framing let me build something without deciding upfront what it was for, and the thing it turned into was a habit tool rather than a reference. That reordering, behaviour first and content second, is the part I'd carry into the next build." }
           ],
           links: []
         }
@@ -1473,6 +1435,44 @@
           lede: "RPVI is a Purdue EPICS team I've led for two years, building tools and programs for blind and low-vision students. This site is how partner schools, prospective volunteers, and funders find out we exist, a rebuild that anchors the team's story under one roof.",
           sections: [
             { heading: 'The team behind it', text: "A 30+ person cross-disciplinary team, split across active projects with our institutional partner Clovernook (Ohio) and schools in Kenya. I lead PM, budget, and partnerships, and I cold-sourced Clovernook itself, which expanded RPVI from a single Purdue effort into a multi-country program." }
+          ],
+          links: []
+        }
+      },
+
+      /* ---------- Charles River Boat Narrator ---------- */
+      {
+        id: 'charles',
+        tag: '[Client Work · 2024]',
+        title: 'Charles River Boat Narrator',
+        role: 'Designer + Builder',
+        hook: "A live tour-narrator microsite for Charles River Boat Company, so international guests can follow along in their own language while they're on the water.",
+        thumb: 'thumb-charles',
+        url: 'https://sosov04.github.io/CharlesRiverBoatNarrator/',
+        shots: {
+          thumb: 'images/projects/charles/thumb.jpg',
+          hero: {
+            src: 'images/projects/charles/hero.jpg',
+            alt: 'The Charles River Boat Company narrator running in English, with the tour script following the boat along the river.',
+            caption: 'The English tour, live: each line highlights as the boat moves.'
+          },
+          details: [
+            {
+              src: 'images/projects/charles/01.jpg',
+              alt: 'The same tour narration rendered in Spanish.',
+              caption: 'Español: the same narration, same timing.'
+            },
+            {
+              src: 'images/projects/charles/02.jpg',
+              alt: 'The same tour narration rendered in Chinese.',
+              caption: '中文: six languages ship from one script.'
+            }
+          ]
+        },
+        walkthrough: {
+          lede: "A GitHub Pages microsite I built for the Charles River Boat Company, where I work seasonally. The tour narrator runs on the guest's phone as the boat moves, so someone visiting from Japan or Brazil can follow the same story about MIT, Fenway, and the Longfellow Bridge that the English-speaking guests are hearing live.",
+          sections: [
+            { heading: 'Why it exists', text: "Between the sales team and the ops team, the ask I kept hearing every season was the same: international guests wanted more than a laminated pamphlet, and the captains couldn't translate 45 minutes of live commentary on the fly. A phone-first, tour-synced microsite was the smallest thing that actually solved it." }
           ],
           links: []
         }
