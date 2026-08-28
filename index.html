@@ -885,9 +885,10 @@
 
     /* ---- Footer popups ----
        Each label in the row hides its details behind one word: Email has
-       two addresses, LinkedIn and GitHub have a URL worth copying.
-       Printing any of that inline would unbalance the row, so it surfaces
-       on hover, focus, or tap instead. */
+       two addresses, LinkedIn and GitHub each show their URL, and every
+       row is a link you click straight through. Printing any of that
+       inline would unbalance the row, so it surfaces on hover, focus,
+       or tap instead. */
     .footer-pop {
       position: relative;
       /* The panel is anchored to this wrapper, so it must not stretch
@@ -985,8 +986,7 @@
 
     /* Addresses and URLs are read verbatim, so they drop the uppercase
        the rest of the mono labels carry. */
-    .footer-pop-panel a,
-    .footer-pop-copy {
+    .footer-pop-panel a {
       display: block;
       width: 100%;
       padding: 0.7rem 1.1rem;
@@ -1000,22 +1000,14 @@
       border: 0;
     }
 
-    /* The copy row is a button; strip the chrome so it matches the anchor
-       beneath it exactly. */
-    .footer-pop-copy {
-      background: none;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-
     /* :not() rather than `* + *` so this outweighs the `border: 0` above
-       — a bare universal selector would lose on specificity. */
+       — a bare universal selector would lose on specificity. Only Email
+       has a second row now, but the rule stays general. */
     .footer-pop-panel > :not(:first-child) {
       border-top: 1px solid var(--line);
     }
 
-    .footer-pop-panel a:hover,
-    .footer-pop-copy:hover {
+    .footer-pop-panel a:hover {
       color: var(--brass);
       border-color: var(--line);
     }
@@ -1169,15 +1161,13 @@
         <div class="footer-pop">
           <button type="button" class="footer-pop-trigger" aria-expanded="false" aria-controls="liPanel">LinkedIn</button>
           <div class="footer-pop-panel" id="liPanel">
-            <button type="button" class="footer-pop-copy" data-copy="https://linkedin.com/in/sophia-vina">linkedin.com/in/sophia-vina</button>
-            <a href="https://linkedin.com/in/sophia-vina" target="_blank" rel="noopener">Open profile &#8599;</a>
+            <a href="https://linkedin.com/in/sophia-vina" target="_blank" rel="noopener">linkedin.com/in/sophia-vina</a>
           </div>
         </div>
         <div class="footer-pop footer-pop--end">
           <button type="button" class="footer-pop-trigger" aria-expanded="false" aria-controls="ghPanel">GitHub</button>
           <div class="footer-pop-panel" id="ghPanel">
-            <button type="button" class="footer-pop-copy" data-copy="https://github.com/SosoV04">github.com/SosoV04</button>
-            <a href="https://github.com/SosoV04" target="_blank" rel="noopener">Open profile &#8599;</a>
+            <a href="https://github.com/SosoV04" target="_blank" rel="noopener">github.com/SosoV04</a>
           </div>
         </div>
       </div>
@@ -1680,46 +1670,6 @@
       if (!open) return;
       setPop(open, false);
       open.querySelector('.footer-pop-trigger').focus();
-    });
-
-    /* ---- Copy a URL to the clipboard ----
-       navigator.clipboard needs a secure context. The live site is HTTPS,
-       but opening this file over file:// can reject, so fall back to the
-       old execCommand path rather than failing silently. */
-    const legacyCopy = text => {
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.setAttribute('readonly', '');
-      ta.style.position = 'fixed';
-      ta.style.opacity = '0';
-      document.body.appendChild(ta);
-      ta.select();
-      try { document.execCommand('copy'); } catch (err) { /* nothing left to try */ }
-      document.body.removeChild(ta);
-    };
-
-    document.querySelectorAll('.footer-pop-copy').forEach(btn => {
-      const url = btn.dataset.copy;
-      const label = btn.textContent;
-      let revert;
-
-      btn.addEventListener('click', e => {
-        // Without this the document handler closes the panel and the
-        // confirmation is never seen.
-        e.stopPropagation();
-
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(url).catch(() => legacyCopy(url));
-        } else {
-          legacyCopy(url);
-        }
-
-        btn.textContent = 'Copied';
-        // Clear the pending revert so fast repeat clicks can't strand the
-        // row reading "Copied".
-        clearTimeout(revert);
-        revert = setTimeout(() => { btn.textContent = label; }, 1400);
-      });
     });
   </script>
 </body>
